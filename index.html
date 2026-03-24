@@ -1366,7 +1366,7 @@ async function exportPDF(){
   const cols=[20,52,20,22,20,20,20];const hdrs=['Date/Time','Duration','Color','Drip','Urgent','Pain','Weak'];
   doc.setFillColor(13,24,40);doc.rect(M,y-5,W-M*2,7,'F');
   doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(0,212,255);
-  let cx=M+2;hdrs.forEach((h,i)=>{doc.text(h,cx,y);cx+=cols[i];});y+=4;
+  cx=M+2;hdrs.forEach((h,i)=>{doc.text(h,cx,y);cx+=cols[i];});y+=4;
   doc.setFont('helvetica','normal');doc.setTextColor(220,235,248);
   const cn=['','Clear','Pale Yel','Yellow','Dark Yel','Amber'];
   [...filtered].reverse().forEach((s,i)=>{
