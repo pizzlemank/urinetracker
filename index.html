@@ -6,9 +6,9 @@
 <meta name="theme-color" content="#040810">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Stream Tracker</title>
+<title>Urine Tracker</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&family=Exo+2:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
   --bg:#040810; --surface:#080f1c; --card:#0d1828; --card2:#101f30;
@@ -18,9 +18,9 @@
   --text:#f0f8ff; --muted:#8ab4cc; --muted2:#6a96b0;
   --logo-a:#00d4ff; --logo-b:#0055ff;
   --hold-bg:#0d1828; --hold-press:#092040;
-  --mono:'Share Tech Mono',monospace;
-  --display:'Orbitron',sans-serif;
-  --body:'Exo 2',sans-serif;
+  --body:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  --display:'Inter',sans-serif;
 }
 [data-theme="light"] {
   --bg:#f0f4f8; --surface:#fff; --card:#e8eef5; --card2:#dde5ee;
@@ -128,50 +128,50 @@ html, body { height:100%; background:var(--bg); color:var(--text); font-family:v
 .scroll-body::-webkit-scrollbar { display:none; }
 
 /* NAV */
-nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-inset-bottom,4px); background:var(--surface); border-top:1px solid var(--border); position:fixed; bottom:0; left:0; right:0; z-index:50; }
-.nb { flex:1; padding:8px 0 4px; background:none; border:none; color:var(--muted); font-family:var(--body); font-size:.66rem; letter-spacing:1.5px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px; text-transform:uppercase; }
-.nb .ico { font-size:1.3rem; }
+nav { display:flex; justify-content:space-around; padding:8px 0 env(safe-area-inset-bottom,4px); background:var(--surface); border-top:1px solid var(--border); position:fixed; bottom:0; left:0; right:0; z-index:50; }
+.nb { flex:1; padding:8px 0 4px; background:none; border:none; color:var(--muted); font-family:var(--body); font-size:.7rem; font-weight:600; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; text-transform:uppercase; transition:color .2s; }
+.nb .ico { font-size:1.4rem; }
 .nb.on { color:var(--accent); }
 
 /* SHARED */
-.ph { padding:14px 18px 8px; display:flex; justify-content:space-between; align-items:flex-end; }
-.pt { font-family:var(--display); font-size:1.3rem; letter-spacing:3px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.1; }
-.ps { font-size:.65rem; color:var(--muted); letter-spacing:1px; text-align:right; line-height:1.8; }
+.ph { padding:18px 20px 10px; display:flex; justify-content:space-between; align-items:flex-end; }
+.pt { font-family:var(--display); font-size:1.4rem; font-weight:800; letter-spacing:-0.5px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.1; }
+.ps { font-size:.72rem; color:var(--muted); font-weight:500; text-align:right; line-height:1.8; }
 
-.srow { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; padding:0 14px 12px; }
-.sbox { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px 8px; text-align:center; position:relative; overflow:hidden; }
+.srow { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:0 16px 14px; }
+.sbox { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px 10px; text-align:center; position:relative; overflow:hidden; }
 .sbox::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--accent2),var(--accent)); }
-.sv { font-family:var(--display); font-size:1.3rem; color:var(--accent); line-height:1; }
-.sl { font-size:.58rem; color:var(--muted); letter-spacing:1.5px; margin-top:4px; text-transform:uppercase; }
+.sv { font-family:var(--display); font-size:1.4rem; font-weight:700; color:var(--accent); line-height:1; }
+.sl { font-size:.65rem; color:var(--muted); font-weight:600; margin-top:5px; text-transform:uppercase; letter-spacing:0.5px; }
 
 /* ONBOARDING */
 #ob { z-index:200; background:var(--bg); align-items:center; justify-content:flex-end; padding-bottom:44px; }
 .sw { flex:1; width:100%; overflow:hidden; }
 .st { display:flex; height:100%; transition:transform .4s cubic-bezier(.4,0,.2,1); }
-.sl2 { min-width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:28px; gap:18px; text-align:center; }
+.sl2 { min-width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px; gap:20px; text-align:center; }
 .si { font-size:4.5rem; line-height:1; }
-.stt { font-family:var(--display); font-size:1.5rem; letter-spacing:3px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-.sb { font-size:.9rem; color:var(--muted); line-height:1.8; max-width:290px; }
-.sb strong { color:var(--text); }
-.dots { display:flex; gap:8px; margin-bottom:14px; }
-.dot { width:8px; height:8px; border-radius:50%; background:var(--border2); transition:background .3s,transform .3s; }
-.dot.on { background:var(--accent); transform:scale(1.3); }
-.obbtn { width:calc(100% - 48px); padding:14px; border-radius:14px; border:none; background:linear-gradient(135deg,var(--accent2),var(--accent)); color:#fff; font-family:var(--display); font-size:.95rem; letter-spacing:3px; cursor:pointer; }
+.stt { font-family:var(--display); font-size:1.6rem; font-weight:800; letter-spacing:-0.5px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.sb { font-size:1rem; color:var(--muted); line-height:1.6; max-width:300px; }
+.sb strong { color:var(--text); font-weight:700; }
+.dots { display:flex; gap:10px; margin-bottom:18px; }
+.dot { width:9px; height:9px; border-radius:50%; background:var(--border2); transition:background .3s,transform .3s; }
+.dot.on { background:var(--accent); transform:scale(1.2); }
+.obbtn { width:calc(100% - 48px); padding:16px; border-radius:16px; border:none; background:linear-gradient(135deg,var(--accent2),var(--accent)); color:#fff; font-family:var(--display); font-size:1rem; font-weight:700; cursor:pointer; }
 .obbtn:active { opacity:.85; transform:scale(.98); }
 
 /* TRACKER */
 #tracker { padding-top:env(safe-area-inset-top,8px); align-items:center; }
-.th { width:100%; padding:12px 18px 6px; display:flex; justify-content:space-between; align-items:center; }
-.logo { font-family:var(--display); font-size:1.1rem; letter-spacing:4px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.2; }
-.thright { display:flex; flex-direction:column; align-items:flex-end; gap:5px; }
-.tbtn { background:var(--card); border:1.5px solid var(--border2); border-radius:20px; padding:5px 12px; cursor:pointer; color:var(--text); font-family:var(--mono); font-size:.58rem; letter-spacing:1px; }
+.th { width:100%; padding:14px 20px 8px; display:flex; justify-content:space-between; align-items:center; }
+.logo { font-family:var(--display); font-size:1.2rem; font-weight:800; letter-spacing:-0.5px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.1; }
+.thright { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
+.tbtn { background:var(--card); border:1.5px solid var(--border2); border-radius:10px; padding:6px 14px; cursor:pointer; color:var(--text); font-family:var(--body); font-weight:600; font-size:.65rem; }
 .tbtn:active { border-color:var(--accent); }
-.hdate { font-size:.62rem; color:var(--muted); text-align:right; line-height:1.8; font-family:var(--mono); }
+.hdate { font-size:.68rem; color:var(--muted); text-align:right; line-height:1.6; font-weight:500; }
 
-.lw { display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 20px 4px; width:100%; }
-.timer { font-family:var(--display); font-size:2.9rem; letter-spacing:2px; color:var(--green); text-shadow:0 0 28px #00ffb355; line-height:1; min-height:50px; display:flex; align-items:center; justify-content:center; transition:color .3s; }
-.timer.idle { color:var(--muted); text-shadow:none; }
-.timer.grace { color:var(--yellow); text-shadow:0 0 20px #ffd93d55; }
+.lw { display:flex; flex-direction:column; align-items:center; gap:4px; padding:10px 20px 6px; width:100%; }
+.timer { font-family:var(--display); font-size:3.4rem; font-weight:700; color:var(--green); line-height:1; min-height:60px; display:flex; align-items:center; justify-content:center; transition:color .3s; }
+.timer.idle { color:var(--muted); }
+.timer.grace { color:var(--yellow); }
 .slbl { font-size:.7rem; letter-spacing:3px; color:var(--muted); text-transform:uppercase; min-height:16px; font-family:var(--mono); }
 .slbl.on { color:var(--green); animation:blink 1s infinite; }
 .slbl.gr { color:var(--yellow); animation:blink .5s infinite; }
@@ -369,19 +369,21 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
 <div class="screen active" id="ob">
   <div class="sw">
     <div class="st" id="strack">
-      <div class="sl2"><div class="si">💧</div><div class="stt">STREAM TRACKER</div><div class="sb">Your private urination health log. <strong>Track duration, color, symptoms</strong> — and share real data with your doctor.</div></div>
+      <div class="sl2"><div class="si">💧</div><div class="stt">URINE TRACKER</div><div class="sb">Your private urination health log. <strong>Track duration, color, and symptoms</strong> — and share real data with your doctor.</div></div>
       <div class="sl2"><div class="si">🔘</div><div class="stt">HOW IT WORKS</div><div class="sb"><strong>Press and hold</strong> the button when you start urinating.<br><strong>Release</strong> when you're done.<br>Rate your session. That's it.</div></div>
-      <div class="sl2"><div class="si">🔒</div><div class="stt">YOUR DATA</div><div class="sb">Everything stays <strong>on your device</strong>. No accounts. No cloud. No ads.<br>Export a PDF anytime for your doctor.</div></div>
+      <div class="sl2"><div class="si">🚰</div><div class="stt">HYDRATION</div><div class="sb">Log your <strong>fluid intake</strong> in the log tab to get a full picture of your bladder health.</div></div>
+      <div class="sl2"><div class="si">📋</div><div class="stt">CLINICAL REPORTS</div><div class="sb">Generate <strong>Doctor-Ready PDF reports</strong>. A professional voiding diary in your pocket.</div></div>
+      <div class="sl2"><div class="si">🔒</div><div class="stt">YOUR DATA</div><div class="sb">Everything stays <strong>on your device</strong>. No accounts. No cloud. No ads.<br>Your health data is your business.</div></div>
     </div>
   </div>
-  <div class="dots"><div class="dot on" id="d0"></div><div class="dot" id="d1"></div><div class="dot" id="d2"></div></div>
+  <div class="dots"><div class="dot on" id="d0"></div><div class="dot" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div><div class="dot" id="d4"></div></div>
   <button class="obbtn" id="obbtn" onclick="obNext()">NEXT</button>
 </div>
 
 <!-- TRACKER -->
 <div class="screen" id="tracker">
   <div class="th">
-    <div class="logo">STREAM<br>TRACKER</div>
+    <div class="logo">URINE<br>TRACKER</div>
     <div class="thright">
       <button class="tbtn" id="themebtn" onclick="cycleTheme()">🌙 DARK</button>
       <div class="hdate" id="hdate"></div>
@@ -397,11 +399,6 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
     <div class="slbl" id="slbl">READY</div>
   </div>
   <div class="ba">
-    <div style="display:flex; gap:12px; margin-bottom:14px; width:calc(100% - 36px);">
-      <button class="tbtn" style="flex:1; padding:12px; border-radius:12px;" onclick="quickIntake(250)">➕ 250ml</button>
-      <button class="tbtn" style="flex:1; padding:12px; border-radius:12px;" onclick="quickIntake(500)">➕ 500ml</button>
-      <button class="tbtn" style="flex:1; padding:12px; border-radius:12px;" onclick="openIntakeModal()">➕ Custom</button>
-    </div>
     <div class="ho" id="holdbtn">
       <div class="ring"></div>
       <div class="hi">
@@ -426,7 +423,11 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
     <div class="sbox"><div class="sv" id="lt">0:00</div><div class="sl">Total</div></div>
     <div class="sbox"><div class="sv" id="la">—</div><div class="sl">Avg</div></div>
   </div>
-  <div class="logtbar"><button class="cdaybtn" onclick="clearDay()">🗑 Clear Day</button></div>
+  <div class="logtbar" style="padding:0 14px 10px; display:flex; gap:8px; flex-wrap:wrap;">
+    <button class="tbtn" style="flex:1; border-color:var(--accent); color:var(--accent);" onclick="openIntakeModal()">🥤 Log Drink</button>
+    <button class="tbtn" style="flex:1; border-color:var(--green); color:var(--green);" onclick="openManualModal()">➕ Manual Piss</button>
+    <button class="cdaybtn" style="padding:6px 10px;" onclick="clearDay()">🗑 Clear Day</button>
+  </div>
   <div class="scroll-body"><div class="loglist" id="loglist"></div></div>
 </div>
 
@@ -434,18 +435,7 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
 <div class="screen" id="settingsscreen">
   <div class="ph"><div class="pt">PROFILE</div><div class="ps">SETTINGS</div></div>
   <div class="scroll-body">
-    <div class="sectitle">👤 BIOMETRICS (FOR DOCTOR)</div>
-    <div class="pfield">
-      <div class="plbl">Age</div>
-      <input type="number" id="p-age" class="ni" placeholder="Years">
-    </div>
-    <div class="pfield">
-      <div class="plbl">Biological Sex</div>
-      <div class="prow">
-        <button class="pbtn" id="p-sex-m" onclick="setSex('Male')">MALE</button>
-        <button class="pbtn" id="p-sex-f" onclick="setSex('Female')">FEMALE</button>
-      </div>
-    </div>
+    <div class="sectitle">👤 USER BIOMETRICS</div>
     <div class="pfield">
       <div class="plbl">Weight (<span id="w-unit-lbl">kg</span>)</div>
       <input type="number" id="p-weight" class="ni" placeholder="Weight">
@@ -607,6 +597,40 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
     </div>
     <button class="savebtn" onclick="saveSession(true)">SAVE SESSION</button>
     <button class="skipbtn" onclick="saveSession(false)">Skip rating</button>
+  </div>
+</div>
+
+<!-- MANUAL ENTRY MODAL -->
+<div class="moverlay" id="mmodal">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">MANUAL ENTRY</div>
+    <div class="msub">LOG MISSED SESSION</div>
+    <div class="rsec">
+      <div class="rlbl">Amount (One of these)</div>
+      <div style="display:flex; gap:10px;">
+        <div style="flex:1">
+          <div class="plbl" style="font-size:.55rem">Volume (<span class="vol-unit">ml</span>)</div>
+          <input type="number" id="m-vol" class="ni" placeholder="ml/oz">
+        </div>
+        <div style="flex:1">
+          <div class="plbl" style="font-size:.55rem">OR Duration (s)</div>
+          <input type="number" id="m-dur" class="ni" placeholder="seconds">
+        </div>
+      </div>
+    </div>
+    <div class="rsec">
+      <div class="rlbl">Time</div>
+      <input type="time" id="m-time" class="ni">
+    </div>
+    <div class="rsec">
+      <div class="rlbl">Options</div>
+      <div class="chiprow">
+        <div class="chip" id="m-leak" onclick="toggleMLeak()">💦 Leak / Accident</div>
+      </div>
+    </div>
+    <button class="savebtn" onclick="saveManual()">SAVE ENTRY</button>
+    <button class="skipbtn" onclick="closeManualModal()">Cancel</button>
   </div>
 </div>
 
@@ -791,11 +815,11 @@ const HTIPS=[
 // ══ ONBOARDING ══
 let obSlide=0;
 function obNext(){
-  if(obSlide<2){
+  if(obSlide<4){
     obSlide++;
     document.getElementById('strack').style.transform=`translateX(-${obSlide*100}%)`;
-    [0,1,2].forEach(i=>document.getElementById('d'+i).classList.toggle('on',i===obSlide));
-    if(obSlide===2) document.getElementById('obbtn').textContent="LET'S PISS 💧";
+    [0,1,2,3,4].forEach(i=>document.getElementById('d'+i).classList.toggle('on',i===obSlide));
+    if(obSlide===4) document.getElementById('obbtn').textContent="LET'S GO 💧";
   } else {
     localStorage.setItem('st_ob','1');
     document.getElementById('ob').classList.remove('active');
@@ -1119,8 +1143,14 @@ async function renderLog(){
     if(item.pain)           b+='<span class="badge r">🔥 Pain</span>';
     if(item.weak)           b+='<span class="badge y">📉 Weak</span>';
     if(item.color)          b+=`<span class="badge">${CDOTS[item.color]} ${CLABELS[item.color]}</span>`;
+    if(item.leak)           b+='<span class="badge r">💦 Leak/Accident</span>';
+    if(item.manual)         b+='<span class="badge">✍️ Manual</span>';
+
+    let lidContent = fmtT(item.dur);
+    if(item.vol) lidContent = `${item.vol}${item.volUnit}`;
+
     return `<div class="logitem" data-ts="${item.ts}">
-      <div><div class="lit">STREAM · ${ts2}</div><div class="lid">${fmtT(item.dur)}</div></div>
+      <div><div class="lit">STREAM · ${ts2}</div><div class="lid">${lidContent}</div></div>
       <div class="lir">${item.dur.toFixed(1)}s</div>
       <button class="lidelbtn" onclick="deleteSession(${item.ts},SN)">🗑</button>
       ${b?`<div class="badges">${b}</div>`:''}
@@ -1325,12 +1355,12 @@ async function exportPDF(){
   const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
   const W=210,M=18;let y=M;
   doc.setFillColor(4,8,16);doc.rect(0,0,W,28,'F');
-  doc.setFont('helvetica','bold');doc.setFontSize(16);doc.setTextColor(0,212,255);doc.text('STREAM TRACKER',M,13);
+  doc.setFont('helvetica','bold');doc.setFontSize(16);doc.setTextColor(0,212,255);doc.text('URINE TRACKER',M,13);
   doc.setFontSize(8);doc.setTextColor(138,180,204);doc.text(`Clinical Report · ${label} · ${new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}`,M,21);
 
   // Profile info at top right
   doc.setFontSize(7); doc.setTextColor(240,248,255);
-  const profInfo = `Age: ${PROF.age||'?'} · Sex: ${PROF.sex||'?'} · Weight: ${PROF.weight||'?'}${PROF.unit==='metric'?'kg':'lb'}`;
+  const profInfo = `Weight: ${PROF.weight||'?'}${PROF.unit==='metric'?'kg':'lb'}`;
   doc.text(profInfo, W-M-doc.getTextWidth(profInfo), 13);
 
   y=34;
@@ -1379,7 +1409,7 @@ async function exportPDF(){
     y+=6;
   });
   const pages=doc.getNumberOfPages();
-  for(let p=1;p<=pages;p++){doc.setPage(p);doc.setFontSize(7);doc.setTextColor(80,100,120);doc.text(`Stream Tracker · Page ${p} of ${pages} · Personal reference only. Consult a healthcare professional for medical advice.`,M,290);}
+  for(let p=1;p<=pages;p++){doc.setPage(p);doc.setFontSize(7);doc.setTextColor(80,100,120);doc.text(`Urine Tracker · Page ${p} of ${pages} · Personal reference only. Consult a healthcare professional for medical advice.`,M,290);}
   doc.save(`stream_tracker_${new Date().toISOString().slice(0,10)}.pdf`);
 }
 
@@ -1397,24 +1427,17 @@ async function handleImport(e){
 async function clearAll(){ if(!confirm('Delete ALL data? This cannot be undone.')) return; await dbClear(SN); await dbClear(SI); await dbClear(SP); renderTracker(); alert('All data cleared.'); }
 
 // ══ SETTINGS / PROFILE ══
-let PROF={id:1,age:'',sex:'',weight:'',unit:'metric',bed:'23:00',wake:'07:00'};
+let PROF={id:1,weight:'',unit:'metric',bed:'23:00',wake:'07:00'};
 async function loadProfile(){
   const p=await dbGet(1,SP);
   if(p) PROF=p;
   renderSettings();
 }
 function renderSettings(){
-  document.getElementById('p-age').value=PROF.age;
   document.getElementById('p-weight').value=PROF.weight;
   document.getElementById('p-bed').value=PROF.bed;
   document.getElementById('p-wake').value=PROF.wake;
-  setSex(PROF.sex,false);
   setUnit(PROF.unit,false);
-}
-function setSex(s,save=true){
-  PROF.sex=s;
-  document.getElementById('p-sex-m').classList.toggle('on',s==='Male');
-  document.getElementById('p-sex-f').classList.toggle('on',s==='Female');
 }
 function setUnit(u,save=true){
   PROF.unit=u;
@@ -1423,7 +1446,6 @@ function setUnit(u,save=true){
   document.getElementById('w-unit-lbl').textContent=u==='metric'?'kg':'lb';
 }
 async function saveProfile(){
-  PROF.age=document.getElementById('p-age').value;
   PROF.weight=document.getElementById('p-weight').value;
   PROF.bed=document.getElementById('p-bed').value;
   PROF.wake=document.getElementById('p-wake').value;
@@ -1461,6 +1483,43 @@ async function saveIntake(){
   await dbPut({ts:Date.now(),amt,type:I_TYPE,unit:PROF.unit==='metric'?'ml':'oz'},SI);
   closeIntakeModal();
   renderLog(); renderStats();
+}
+
+// ══ MANUAL PISS ══
+let M_LEAK=false;
+function openManualModal(){
+  document.getElementById('m-vol').value='';
+  document.getElementById('m-dur').value='';
+  M_LEAK=false;
+  document.getElementById('m-leak').classList.remove('ca');
+  const now=new Date();
+  document.getElementById('m-time').value=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  document.getElementById('mmodal').classList.add('on');
+}
+function closeManualModal(){ document.getElementById('mmodal').classList.remove('on'); }
+function toggleMLeak(){ M_LEAK=!M_LEAK; document.getElementById('m-leak').classList.toggle('ca',M_LEAK); }
+
+async function saveManual(){
+  const vol=parseFloat(document.getElementById('m-vol').value);
+  const dur=parseFloat(document.getElementById('m-dur').value);
+  if(!vol && !dur){ alert('Enter volume or duration'); return; }
+
+  const tStr=document.getElementById('m-time').value;
+  const d=new Date(); d.setDate(d.getDate()+vOff);
+  const [h,m]=tStr.split(':'); d.setHours(h,m,0,0);
+
+  const s={
+    ts:d.getTime(),
+    dur:dur||0,
+    vol:vol||null,
+    volUnit:vol?PROF.unit==='metric'?'ml':'oz':null,
+    leak:M_LEAK,
+    manual:true,
+    thumb:null,drip:null,color:null,urgency:false,pain:false,weak:false
+  };
+  await dbPut(s,SN);
+  closeManualModal();
+  renderLog(); renderStats(); renderTracker();
 }
 
 // ══ INIT ══

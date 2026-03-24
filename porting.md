@@ -1,4 +1,4 @@
-# Stream Tracker: Developer & Porting Guide
+# Urine Tracker: Developer & Porting Guide
 
 This guide provides instructions for previewing the app locally, porting it to Android, and extending it to a smart watch.
 
@@ -39,7 +39,7 @@ The easiest way to port this HTML/JS app to Android is using **Capacitor**. It w
     ```
 2.  **Initialize Capacitor:**
     ```bash
-    npx cap init StreamTracker com.example.urinetracker --web-dir .
+    npx cap init UrineTracker com.example.urinetracker --web-dir .
     ```
 3.  **Add Android Platform:**
     ```bash
