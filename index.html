@@ -260,6 +260,14 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
 .savebtn:active { opacity:.85; transform:scale(.98); }
 .skipbtn { width:100%; padding:9px; border:none; background:none; color:var(--muted); font-family:var(--mono); font-size:.68rem; letter-spacing:1px; cursor:pointer; margin-top:4px; }
 
+/* SETTINGS */
+#settingsscreen { padding-top:env(safe-area-inset-top,0); }
+.pfield { margin-bottom:14px; padding:0 14px; }
+.plbl { font-size:.62rem; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px; font-family:var(--mono); }
+.prow { display:flex; gap:10px; }
+.pbtn { flex:1; padding:10px; border-radius:10px; border:1.5px solid var(--border2); background:var(--card); color:var(--muted); font-family:var(--mono); font-size:.7rem; cursor:pointer; text-align:center; }
+.pbtn.on { border-color:var(--accent); color:var(--accent); background:color-mix(in srgb,var(--accent) 8%,transparent); }
+
 /* LOG */
 #logscreen { padding-top:env(safe-area-inset-top,0); }
 .dnav { display:flex; align-items:center; justify-content:space-between; padding:0 14px 10px; }
@@ -389,6 +397,11 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
     <div class="slbl" id="slbl">READY</div>
   </div>
   <div class="ba">
+    <div style="display:flex; gap:12px; margin-bottom:14px; width:calc(100% - 36px);">
+      <button class="tbtn" style="flex:1; padding:12px; border-radius:12px;" onclick="quickIntake(250)">➕ 250ml</button>
+      <button class="tbtn" style="flex:1; padding:12px; border-radius:12px;" onclick="quickIntake(500)">➕ 500ml</button>
+      <button class="tbtn" style="flex:1; padding:12px; border-radius:12px;" onclick="openIntakeModal()">➕ Custom</button>
+    </div>
     <div class="ho" id="holdbtn">
       <div class="ring"></div>
       <div class="hi">
@@ -417,10 +430,74 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
   <div class="scroll-body"><div class="loglist" id="loglist"></div></div>
 </div>
 
+<!-- SETTINGS -->
+<div class="screen" id="settingsscreen">
+  <div class="ph"><div class="pt">PROFILE</div><div class="ps">SETTINGS</div></div>
+  <div class="scroll-body">
+    <div class="sectitle">👤 BIOMETRICS (FOR DOCTOR)</div>
+    <div class="pfield">
+      <div class="plbl">Age</div>
+      <input type="number" id="p-age" class="ni" placeholder="Years">
+    </div>
+    <div class="pfield">
+      <div class="plbl">Biological Sex</div>
+      <div class="prow">
+        <button class="pbtn" id="p-sex-m" onclick="setSex('Male')">MALE</button>
+        <button class="pbtn" id="p-sex-f" onclick="setSex('Female')">FEMALE</button>
+      </div>
+    </div>
+    <div class="pfield">
+      <div class="plbl">Weight (<span id="w-unit-lbl">kg</span>)</div>
+      <input type="number" id="p-weight" class="ni" placeholder="Weight">
+    </div>
+
+    <div class="sectitle">⚙️ PREFERENCES</div>
+    <div class="pfield">
+      <div class="plbl">Unit System</div>
+      <div class="prow">
+        <button class="pbtn" id="p-unit-metric" onclick="setUnit('metric')">METRIC (ml/kg)</button>
+        <button class="pbtn" id="p-unit-imp" onclick="setUnit('imp')">IMPERIAL (oz/lb)</button>
+      </div>
+    </div>
+
+    <div class="sectitle">🌙 SLEEP WINDOW (FOR NOCTURIA)</div>
+    <div class="pfield">
+      <div class="plbl">Bed Time</div>
+      <input type="time" id="p-bed" class="ni">
+    </div>
+    <div class="pfield">
+      <div class="plbl">Wake Time</div>
+      <input type="time" id="p-wake" class="ni">
+    </div>
+
+    <div style="padding:0 14px 20px">
+      <button class="savebtn" onclick="saveProfile()">SAVE PROFILE</button>
+    </div>
+  </div>
+</div>
+
 <!-- STATS -->
 <div class="screen" id="statsscreen">
   <div class="ph"><div class="pt">ANALYTICS</div><div class="ps">INSIGHTS</div></div>
   <div class="scroll-body">
+    <div id="clin-summary-wrap" style="padding:0 14px 14px">
+      <div class="sectitle">📋 DOCTOR'S SUMMARY (LAST 3 DAYS)</div>
+      <div class="bigbox" style="padding:0; overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; font-family:var(--mono); font-size:.65rem; color:var(--text); text-align:left;">
+          <thead style="background:var(--card2); color:var(--accent);">
+            <tr>
+              <th style="padding:8px;">Day</th>
+              <th style="padding:8px;">In</th>
+              <th style="padding:8px;">Out(s)</th>
+              <th style="padding:8px;">Max(s)</th>
+              <th style="padding:8px;">Night</th>
+            </tr>
+          </thead>
+          <tbody id="clin-body"></tbody>
+        </table>
+      </div>
+    </div>
+
     <div class="sectitle">🩺 HEALTH INSIGHTS</div>
     <div class="insights" id="insights"></div>
     <div class="biggrid">
@@ -434,9 +511,28 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
     <div class="sectitle">⏰ TIME-OF-DAY HEATMAP</div>
     <div class="heatmap" id="heatmap"></div>
     <div class="hmlbls"><span class="hmlbl">12AM</span><span class="hmlbl">6AM</span><span class="hmlbl">12PM</span><span class="hmlbl">6PM</span><span class="hmlbl">11PM</span></div>
-    <div class="sectitle">📅 7-DAY TREND</div>
+    <div class="sectitle">📅 7-DAY TREND (SESSIONS)</div>
     <div class="trendbars" id="trendbars"></div>
     <div class="trendlbls" id="trendlbls"></div>
+
+    <div class="sectitle">🚰 HYDRATION GOAL</div>
+    <div style="padding:0 14px 14px;">
+      <div class="bigbox">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div class="bigval" id="h-progress">0%</div>
+            <div class="biglbl">Today's Intake</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="lit" id="h-total">0 / 0 ml</div>
+            <div class="biglbl" id="h-goal-lbl">Goal based on weight</div>
+          </div>
+        </div>
+        <div style="width:100%; height:6px; background:var(--card2); border-radius:3px; margin-top:12px; overflow:hidden;">
+          <div id="h-bar" style="width:0%; height:100%; background:var(--accent); transition:width .5s;"></div>
+        </div>
+      </div>
+    </div>
     <div class="sectitle">🎨 URINE COLOR DISTRIBUTION</div>
     <div class="histwrap" id="histwrap"></div>
     <div class="histlbls"><div class="histlbl">Clear</div><div class="histlbl">Pale</div><div class="histlbl">Yellow</div><div class="histlbl">Dark</div><div class="histlbl">Amber</div></div>
@@ -463,6 +559,7 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
   <button class="nb" id="nav-tracker" onclick="showScreen('tracker')"><span class="ico">💧</span>TRACK</button>
   <button class="nb" id="nav-log"     onclick="showScreen('log')"><span class="ico">📋</span>LOG</button>
   <button class="nb" id="nav-stats"   onclick="showScreen('stats')"><span class="ico">📊</span>STATS</button>
+  <button class="nb" id="nav-settings" onclick="showScreen('settings')"><span class="ico">⚙️</span>SETTINGS</button>
 </nav>
 
 <!-- RATING MODAL -->
@@ -510,6 +607,30 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
     </div>
     <button class="savebtn" onclick="saveSession(true)">SAVE SESSION</button>
     <button class="skipbtn" onclick="saveSession(false)">Skip rating</button>
+  </div>
+</div>
+
+<!-- INTAKE MODAL -->
+<div class="moverlay" id="imodall">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">LOG INTAKE</div>
+    <div class="msub">FLUID INTAKE</div>
+    <div class="rsec">
+      <div class="rlbl">Amount (<span class="vol-unit">ml</span>)</div>
+      <input type="number" id="i-amt" class="ni" placeholder="Enter amount">
+    </div>
+    <div class="rsec">
+      <div class="rlbl">Type</div>
+      <div class="chiprow">
+        <div class="chip" id="it-water" onclick="pickIntakeType('Water')">💧 Water</div>
+        <div class="chip" id="it-coffee" onclick="pickIntakeType('Coffee/Tea')">☕ Coffee/Tea</div>
+        <div class="chip" id="it-soda" onclick="pickIntakeType('Soda/Juice')">🥤 Soda/Juice</div>
+        <div class="chip" id="it-alcohol" onclick="pickIntakeType('Alcohol')">🍺 Alcohol</div>
+      </div>
+    </div>
+    <button class="savebtn" onclick="saveIntake()">SAVE INTAKE</button>
+    <button class="skipbtn" onclick="closeIntakeModal()">Cancel</button>
   </div>
 </div>
 
@@ -738,20 +859,26 @@ function applyTheme(i){
 function cycleTheme(){ applyTheme((themeIdx+1)%3); }
 
 // ══ INDEXEDDB ══
-const DBN='StreamTrackerDB', SN='sessions';
+const DBN='StreamTrackerDB', SN='sessions', SI='intake', SP='profile';
 let db=null;
 function openDB(){
   return new Promise((res,rej)=>{
-    const r=indexedDB.open(DBN,1);
-    r.onupgradeneeded=e=>{ if(!e.target.result.objectStoreNames.contains(SN)) e.target.result.createObjectStore(SN,{keyPath:'ts'}); };
+    const r=indexedDB.open(DBN,2);
+    r.onupgradeneeded=e=>{
+      const d=e.target.result;
+      if(!d.objectStoreNames.contains(SN)) d.createObjectStore(SN,{keyPath:'ts'});
+      if(!d.objectStoreNames.contains(SI)) d.createObjectStore(SI,{keyPath:'ts'});
+      if(!d.objectStoreNames.contains(SP)) d.createObjectStore(SP,{keyPath:'id'});
+    };
     r.onsuccess=e=>{ db=e.target.result; res(); };
     r.onerror=rej;
   });
 }
-function dbAll(){ return new Promise((res,rej)=>{ const r=db.transaction(SN,'readonly').objectStore(SN).getAll(); r.onsuccess=()=>res(r.result||[]); r.onerror=rej; }); }
-function dbPut(s){ return new Promise((res,rej)=>{ const r=db.transaction(SN,'readwrite').objectStore(SN).put(s); r.onsuccess=res; r.onerror=rej; }); }
-function dbDel(ts){ return new Promise((res,rej)=>{ const r=db.transaction(SN,'readwrite').objectStore(SN).delete(ts); r.onsuccess=res; r.onerror=rej; }); }
-function dbClear(){ return new Promise((res,rej)=>{ const r=db.transaction(SN,'readwrite').objectStore(SN).clear(); r.onsuccess=res; r.onerror=rej; }); }
+function dbAll(store=SN){ return new Promise((res,rej)=>{ const r=db.transaction(store,'readonly').objectStore(store).getAll(); r.onsuccess=()=>res(r.result||[]); r.onerror=rej; }); }
+function dbGet(key,store=SN){ return new Promise((res,rej)=>{ const r=db.transaction(store,'readonly').objectStore(store).get(key); r.onsuccess=()=>res(r.result); r.onerror=rej; }); }
+function dbPut(s,store=SN){ return new Promise((res,rej)=>{ const r=db.transaction(store,'readwrite').objectStore(store).put(s); r.onsuccess=res; r.onerror=rej; }); }
+function dbDel(ts,store=SN){ return new Promise((res,rej)=>{ const r=db.transaction(store,'readwrite').objectStore(store).delete(ts); r.onsuccess=res; r.onerror=rej; }); }
+function dbClear(store=SN){ return new Promise((res,rej)=>{ const r=db.transaction(store,'readwrite').objectStore(store).clear(); r.onsuccess=res; r.onerror=rej; }); }
 
 function dayKey(off=0){ const d=new Date(); d.setDate(d.getDate()+off); return d.toISOString().slice(0,10); }
 function sKey(ts){ return new Date(ts).toISOString().slice(0,10); }
@@ -766,10 +893,12 @@ async function migrate(){
 function showScreen(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
-  document.getElementById(name==='log'?'logscreen':name==='stats'?'statsscreen':'tracker').classList.add('active');
+  let sid=name==='log'?'logscreen':name==='stats'?'statsscreen':name==='settings'?'settingsscreen':'tracker';
+  document.getElementById(sid).classList.add('active');
   document.getElementById('nav-'+name).classList.add('on');
   if(name==='log') renderLog();
   if(name==='stats') renderStats();
+  if(name==='settings') renderSettings();
 }
 
 // ══ FIREWORKS ══
@@ -930,54 +1059,74 @@ function changeDay(d){ vOff=Math.min(0,vOff+d); renderLog(); }
 const CLABELS=['','Clear','Pale Yellow','Yellow','Dark Yellow','Dark Amber'];
 const CDOTS=['','⚪','🟡','🟡','🟠','🟤'];
 
-async function deleteSession(ts){
-  if(!confirm('Delete this session? This cannot be undone.')) return;
+async function deleteSession(ts,store=SN){
+  if(!confirm('Delete this entry? This cannot be undone.')) return;
   const el=document.querySelector(`.logitem[data-ts="${ts}"]`);
   if(el) el.classList.add('del');
-  setTimeout(async()=>{ await dbDel(ts); renderLog(); renderTracker(); },280);
+  setTimeout(async()=>{ await dbDel(ts,store); renderLog(); renderTracker(); },280);
 }
 
 async function clearDay(){
-  if(!confirm('Clear all sessions for this day?')) return;
-  const all=await dbAll();
-  for(const s of all.filter(x=>sKey(x.ts)===dayKey(vOff))) await dbDel(s.ts);
+  if(!confirm('Clear all entries for this day?')) return;
+  const sessions=await dbAll(SN);
+  for(const s of sessions.filter(x=>sKey(x.ts)===dayKey(vOff))) await dbDel(s.ts,SN);
+  const intakes=await dbAll(SI);
+  for(const i of intakes.filter(x=>sKey(x.ts)===dayKey(vOff))) await dbDel(i.ts,SI);
   renderLog(); renderTracker();
 }
 
 async function renderLog(){
-  const all=await dbAll();
-  const ss=all.filter(s=>sKey(s.ts)===dayKey(vOff)).sort((a,b)=>b.ts-a.ts);
-  const tot=ss.reduce((a,s)=>a+s.dur,0);
-  document.getElementById('lc').textContent=ss.length;
+  const sessions=await dbAll(SN);
+  const intakes=await dbAll(SI);
+
+  const daySessions=sessions.filter(s=>sKey(s.ts)===dayKey(vOff));
+  const dayIntakes=intakes.filter(i=>sKey(i.ts)===dayKey(vOff));
+
+  const combined=[
+    ...daySessions.map(s=>({...s,kind:'session'})),
+    ...dayIntakes.map(i=>({...i,kind:'intake'}))
+  ].sort((a,b)=>b.ts-a.ts);
+
+  const tot=daySessions.reduce((a,s)=>a+s.dur,0);
+  document.getElementById('lc').textContent=daySessions.length;
   document.getElementById('lt').textContent=fmtS(tot);
-  document.getElementById('la').textContent=ss.length?fmtS(tot/ss.length):'—';
+  document.getElementById('la').textContent=daySessions.length?fmtS(tot/daySessions.length):'—';
   document.getElementById('dnext').disabled=vOff>=0;
   const dl={0:'TODAY','-1':'YESTERDAY'};
   const d=new Date(); d.setDate(d.getDate()+vOff);
   document.getElementById('dnlbl').textContent=dl[vOff]||d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   document.getElementById('logdate').innerHTML=new Date().toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric'})+'<br>'+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   const list=document.getElementById('loglist');
-  if(!ss.length){ list.innerHTML='<div class="emptymsg">NO SESSIONS THIS DAY</div>'; return; }
-  list.innerHTML=ss.map((s,i)=>{
-    const t=new Date(s.ts);
+  if(!combined.length){ list.innerHTML='<div class="emptymsg">NO ACTIVITY THIS DAY</div>'; return; }
+  list.innerHTML=combined.map((item,i)=>{
+    const t=new Date(item.ts);
     const ts2=t.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
+    if(item.kind==='intake'){
+      return `<div class="logitem" style="border-left-color:var(--accent)" data-ts="${item.ts}">
+        <div><div class="lit">INTAKE · ${ts2}</div><div class="lid" style="color:var(--accent)">${item.amt}${item.unit}</div></div>
+        <div class="lir">${item.type}</div>
+        <button class="lidelbtn" onclick="deleteSession(${item.ts},SI)">🗑</button>
+      </div>`;
+    }
+
     let b='';
-    if(s.thumb==='up')   b+='<span class="badge g">👍 Good</span>';
-    if(s.thumb==='down') b+='<span class="badge r">👎 Poor</span>';
-    if(s.drip==='yes')   b+='<span class="badge r">💦 Drip</span>';
-    if(s.drip==='no')    b+='<span class="badge g">✅ Clean</span>';
-    if(s.urgency)        b+='<span class="badge o">⚡ Urgent</span>';
-    if(s.pain)           b+='<span class="badge r">🔥 Pain</span>';
-    if(s.weak)           b+='<span class="badge y">📉 Weak</span>';
-    if(s.color)          b+=`<span class="badge">${CDOTS[s.color]} ${CLABELS[s.color]}</span>`;
-    return `<div class="logitem" data-ts="${s.ts}">
-      <div><div class="lit">#${ss.length-i} · ${ts2}</div><div class="lid">${fmtT(s.dur)}</div></div>
-      <div class="lir">${s.dur.toFixed(1)}s</div>
-      <button class="lidelbtn" onclick="deleteSession(${s.ts})">🗑</button>
+    if(item.thumb==='up')   b+='<span class="badge g">👍 Good</span>';
+    if(item.thumb==='down') b+='<span class="badge r">👎 Poor</span>';
+    if(item.drip==='yes')   b+='<span class="badge r">💦 Drip</span>';
+    if(item.drip==='no')    b+='<span class="badge g">✅ Clean</span>';
+    if(item.urgency)        b+='<span class="badge o">⚡ Urgent</span>';
+    if(item.pain)           b+='<span class="badge r">🔥 Pain</span>';
+    if(item.weak)           b+='<span class="badge y">📉 Weak</span>';
+    if(item.color)          b+=`<span class="badge">${CDOTS[item.color]} ${CLABELS[item.color]}</span>`;
+    return `<div class="logitem" data-ts="${item.ts}">
+      <div><div class="lit">STREAM · ${ts2}</div><div class="lid">${fmtT(item.dur)}</div></div>
+      <div class="lir">${item.dur.toFixed(1)}s</div>
+      <button class="lidelbtn" onclick="deleteSession(${item.ts},SN)">🗑</button>
       ${b?`<div class="badges">${b}</div>`:''}
-      ${s.notes?`<div class="linote">📝 ${s.notes}</div>`:''}
-      ${s.photo?`<div class="liphoto"><img src="${s.photo}" alt=""></div>`:''}
-      <button class="liaddphoto" onclick="openPeModal(${s.ts})">${s.photo?'🔄 Replace photo':'📷 Add photo'}</button>
+      ${item.notes?`<div class="linote">📝 ${item.notes}</div>`:''}
+      ${item.photo?`<div class="liphoto"><img src="${item.photo}" alt=""></div>`:''}
+      <button class="liaddphoto" onclick="openPeModal(${item.ts})">${item.photo?'🔄 Replace photo':'📷 Add photo'}</button>
     </div>`;
   }).join('');
 }
@@ -1076,17 +1225,19 @@ function buildInsights(all){
 }
 
 async function renderStats(){
-  const all=await dbAll();
+  const sessions=await dbAll(SN);
+  const intakes=await dbAll(SI);
+
   let tot=0,cnt=0,dFree=0,dRated=0,longest=0,days=new Set();
   const cc=[0,0,0,0,0],hh=Array(24).fill(0),dc={};
-  all.forEach(s=>{ tot+=s.dur;cnt++;if(s.dur>longest)longest=s.dur;if(s.drip==='no')dFree++;if(s.drip)dRated++;if(s.color)cc[s.color-1]++;hh[new Date(s.ts).getHours()]++;const k=sKey(s.ts);days.add(k);dc[k]=(dc[k]||0)+1; });
+  sessions.forEach(s=>{ tot+=s.dur;cnt++;if(s.dur>longest)longest=s.dur;if(s.drip==='no')dFree++;if(s.drip)dRated++;if(s.color)cc[s.color-1]++;hh[new Date(s.ts).getHours()]++;const k=sKey(s.ts);days.add(k);dc[k]=(dc[k]||0)+1; });
   document.getElementById('at').textContent=cnt;
   document.getElementById('ati').textContent=fmtS(tot);
   document.getElementById('aav').textContent=cnt?fmtS(tot/cnt):'—';
   document.getElementById('adr').textContent=dRated?Math.round(dFree/dRated*100)+'%':'—';
   document.getElementById('aln').textContent=longest?fmtT(longest):'—';
   document.getElementById('ady').textContent=days.size;
-  document.getElementById('insights').innerHTML=buildInsights([...all]).map(c=>`<div class="icard"><div class="idot ${c.dot}"></div><div class="itxt"><div class="ititle">${c.title}</div><div class="ibody">${c.body}</div></div></div>`).join('');
+  document.getElementById('insights').innerHTML=buildInsights([...sessions]).map(c=>`<div class="icard"><div class="idot ${c.dot}"></div><div class="itxt"><div class="ititle">${c.title}</div><div class="ibody">${c.body}</div></div></div>`).join('');
   const maxH=Math.max(...hh,1);
   document.getElementById('heatmap').innerHTML=hh.map((n,h)=>{ const a=n===0?.05:.08+n/maxH*.85; const bg=n===0?'var(--card2)':`rgba(0,212,255,${a.toFixed(2)})`; return `<div class="hmcell" style="background:${bg}" title="${h}:00 — ${n}"></div>`; }).join('');
   const d7=Array.from({length:7},(_,i)=>dayKey(i-6));
@@ -1095,6 +1246,58 @@ async function renderStats(){
   document.getElementById('trendlbls').innerHTML=d7.map((k,i)=>{ const dd=new Date(k+'T12:00:00'); return `<div class="trendlbl">${i===6?'Today':dd.toLocaleDateString('en-US',{weekday:'short'})}</div>`; }).join('');
   const maxC=Math.max(...cc,1),sw=['#fefde8','#ffe566','#ffc107','#e68900','#a0560a'];
   document.getElementById('histwrap').innerHTML=cc.map((n,i)=>`<div class="histbar" style="height:${Math.max(4,n/maxC*100)}%;background:${sw[i]}"></div>`).join('');
+
+  renderHydrationGoal(intakes);
+  renderClinicalSummary(sessions,intakes);
+}
+
+function renderHydrationGoal(intakes){
+  const today=dayKey(0);
+  const total=intakes.filter(i=>sKey(i.ts)===today).reduce((a,v)=>a+v.amt,0);
+
+  let goal=2500; // Default
+  if(PROF.weight){
+    // ~35ml per kg is a standard clinical guideline
+    goal=PROF.unit==='metric'?Math.round(PROF.weight*35):Math.round(PROF.weight*0.5); // 0.5 oz per lb
+  }
+
+  const unit=PROF.unit==='metric'?'ml':'oz';
+  const pct=Math.min(100,Math.round(total/goal*100));
+  document.getElementById('h-progress').textContent=`${pct}%`;
+  document.getElementById('h-total').textContent=`${total} / ${goal} ${unit}`;
+  document.getElementById('h-bar').style.width=`${pct}%`;
+  document.getElementById('h-goal-lbl').textContent=`Goal based on weight (${PROF.weight||'?'} ${PROF.unit==='metric'?'kg':'lb'})`;
+}
+
+function isNight(ts){
+  const t=new Date(ts);
+  const time=`${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`;
+  const bed=PROF.bed, wake=PROF.wake;
+  if(bed<=wake) return time>=bed && time<=wake;
+  return time>=bed || time<=wake;
+}
+
+function renderClinicalSummary(sessions,intakes){
+  const last3=Array.from({length:3},(_,i)=>dayKey(-i));
+  const html=last3.map(day=>{
+    const dInt=intakes.filter(i=>sKey(i.ts)===day).reduce((a,v)=>a+v.amt,0);
+    const dSess=sessions.filter(s=>sKey(s.ts)===day);
+    const dOut=dSess.reduce((a,v)=>a+v.dur,0);
+    const dMax=dSess.length?Math.max(...dSess.map(s=>s.dur)):0;
+    const dNight=dSess.filter(s=>isNight(s.ts)).length;
+
+    const dObj=new Date(day+'T12:00:00');
+    const dLabel=day===dayKey(0)?'Today':dObj.toLocaleDateString('en-US',{weekday:'short'});
+
+    return `<tr style="border-top:1px solid var(--border)">
+      <td style="padding:8px;">${dLabel}</td>
+      <td style="padding:8px;">${dInt}${PROF.unit==='metric'?'ml':'oz'}</td>
+      <td style="padding:8px;">${dOut.toFixed(0)}s</td>
+      <td style="padding:8px;">${dMax.toFixed(0)}s</td>
+      <td style="padding:8px;">${dNight}x</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('clin-body').innerHTML=html;
 }
 
 // ══ PDF ══
@@ -1112,9 +1315,10 @@ async function exportPDF(){
   const ok=await loadJsPDF();
   if(!ok||!window.jspdf){ alert('PDF library failed to load. Check your internet connection.'); return; }
   const {jsPDF}=window.jspdf;
-  const all=await dbAll();
+  const sessions=await dbAll(SN);
+  const intakes=await dbAll(SI);
   const now=Date.now();
-  let filtered=pdfR===0?all:all.filter(s=>s.ts>=now-pdfR*864e5);
+  let filtered=pdfR===0?sessions:sessions.filter(s=>s.ts>=now-pdfR*864e5);
   const label=pdfR===7?'Last 7 Days':pdfR===30?'Last 30 Days':'All Time';
   filtered=filtered.sort((a,b)=>a.ts-b.ts);
   if(!filtered.length){ alert('No sessions in selected range.'); return; }
@@ -1122,17 +1326,42 @@ async function exportPDF(){
   const W=210,M=18;let y=M;
   doc.setFillColor(4,8,16);doc.rect(0,0,W,28,'F');
   doc.setFont('helvetica','bold');doc.setFontSize(16);doc.setTextColor(0,212,255);doc.text('STREAM TRACKER',M,13);
-  doc.setFontSize(8);doc.setTextColor(138,180,204);doc.text(`Urine Health Report · ${label} · ${new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}`,M,21);
+  doc.setFontSize(8);doc.setTextColor(138,180,204);doc.text(`Clinical Report · ${label} · ${new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}`,M,21);
+
+  // Profile info at top right
+  doc.setFontSize(7); doc.setTextColor(240,248,255);
+  const profInfo = `Age: ${PROF.age||'?'} · Sex: ${PROF.sex||'?'} · Weight: ${PROF.weight||'?'}${PROF.unit==='metric'?'kg':'lb'}`;
+  doc.text(profInfo, W-M-doc.getTextWidth(profInfo), 13);
+
   y=34;
   const tot=filtered.reduce((a,s)=>a+s.dur,0);
   const avg=filtered.length?tot/filtered.length:0;
   const dr=filtered.filter(s=>s.drip),drfree=filtered.filter(s=>s.drip==='no');
   doc.setFillColor(13,24,40);doc.roundedRect(M,y,W-M*2,34,3,3,'F');
-  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(0,212,255);doc.text('SUMMARY',M+6,y+7);
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(0,212,255);doc.text('STATISTICAL SUMMARY',M+6,y+7);
   doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(240,248,255);
   const sdata=[['Total Sessions',filtered.length],['Total Stream Time',fmtS(tot)],['Avg Duration',fmtS(avg)],['Drip-Free Rate',dr.length?Math.round(drfree.length/dr.length*100)+'%':'N/A'],['Date Range',`${fmtDate(filtered[0].ts)} – ${fmtDate(filtered[filtered.length-1].ts)}`],['Sessions w/ Symptoms',filtered.filter(s=>s.urgency||s.pain||s.weak).length]];
   sdata.forEach((row,i)=>{ const col=i<3?M+6:M+(W-M*2)/2+4,r=i<3?i:i-3; doc.setTextColor(138,180,204);doc.text(row[0],col,y+14+r*7);doc.setTextColor(240,248,255);doc.text(String(row[1]),col+44,y+14+r*7); });
-  y+=40;
+  y+=42;
+
+  // Clinical Summary Table (Daily)
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(0,212,255);doc.text('VOIDING DIARY (DAILY SUMMARY)',M,y);y+=6;
+  const ccols=[40,30,30,30,44];const chdrs=['Date','Intake','Output (s)','Max (s)','Night Sessions'];
+  doc.setFillColor(13,24,40);doc.rect(M,y-4,W-M*2,6,'F');
+  doc.setFontSize(7.5); let cx=M+2; chdrs.forEach((h,i)=>{doc.text(h,cx,y);cx+=ccols[i];});y+=6;
+  doc.setFont('helvetica','normal');doc.setTextColor(220,235,248);
+  const uniqueDays = [...new Set(filtered.map(s=>sKey(s.ts)))].sort().reverse();
+  uniqueDays.forEach(day=>{
+    const dInt=intakes.filter(i=>sKey(i.ts)===day).reduce((a,v)=>a+v.amt,0);
+    const dSess=filtered.filter(s=>sKey(s.ts)===day);
+    const dOut=dSess.reduce((a,v)=>a+v.dur,0);
+    const dMax=dSess.length?Math.max(...dSess.map(s=>s.dur)):0;
+    const dNight=dSess.filter(s=>isNight(s.ts)).length;
+    const row=[new Date(day+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),`${dInt}${PROF.unit==='metric'?'ml':'oz'}`,`${dOut.toFixed(1)}s`,`${dMax.toFixed(1)}s`,`${dNight}x` ];
+    cx=M+2; row.forEach((v,j)=>{doc.text(String(v),cx,y);cx+=ccols[j];}); y+=5;
+  });
+
+  y+=6;
   doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(0,212,255);doc.text('SESSION LOG',M,y);y+=8;
   const cols=[20,52,20,22,20,20,20];const hdrs=['Date/Time','Duration','Color','Drip','Urgent','Pain','Weak'];
   doc.setFillColor(13,24,40);doc.rect(M,y-5,W-M*2,7,'F');
@@ -1165,7 +1394,74 @@ async function handleImport(e){
   };
   reader.readAsText(file);e.target.value='';
 }
-async function clearAll(){ if(!confirm('Delete ALL data? This cannot be undone.')) return; await dbClear(); renderTracker(); alert('All data cleared.'); }
+async function clearAll(){ if(!confirm('Delete ALL data? This cannot be undone.')) return; await dbClear(SN); await dbClear(SI); await dbClear(SP); renderTracker(); alert('All data cleared.'); }
+
+// ══ SETTINGS / PROFILE ══
+let PROF={id:1,age:'',sex:'',weight:'',unit:'metric',bed:'23:00',wake:'07:00'};
+async function loadProfile(){
+  const p=await dbGet(1,SP);
+  if(p) PROF=p;
+  renderSettings();
+}
+function renderSettings(){
+  document.getElementById('p-age').value=PROF.age;
+  document.getElementById('p-weight').value=PROF.weight;
+  document.getElementById('p-bed').value=PROF.bed;
+  document.getElementById('p-wake').value=PROF.wake;
+  setSex(PROF.sex,false);
+  setUnit(PROF.unit,false);
+}
+function setSex(s,save=true){
+  PROF.sex=s;
+  document.getElementById('p-sex-m').classList.toggle('on',s==='Male');
+  document.getElementById('p-sex-f').classList.toggle('on',s==='Female');
+}
+function setUnit(u,save=true){
+  PROF.unit=u;
+  document.getElementById('p-unit-metric').classList.toggle('on',u==='metric');
+  document.getElementById('p-unit-imp').classList.toggle('on',u==='imp');
+  document.getElementById('w-unit-lbl').textContent=u==='metric'?'kg':'lb';
+}
+async function saveProfile(){
+  PROF.age=document.getElementById('p-age').value;
+  PROF.weight=document.getElementById('p-weight').value;
+  PROF.bed=document.getElementById('p-bed').value;
+  PROF.wake=document.getElementById('p-wake').value;
+  await dbPut(PROF,SP);
+  document.querySelectorAll('.vol-unit').forEach(el=>el.textContent=PROF.unit==='metric'?'ml':'oz');
+  alert('Profile saved!');
+}
+
+// ══ INTAKE ══
+let I_AMT=0, I_TYPE='Water';
+function openIntakeModal(){
+  document.getElementById('i-amt').value='';
+  pickIntakeType('Water');
+  document.querySelectorAll('.vol-unit').forEach(el=>el.textContent=PROF.unit==='metric'?'ml':'oz');
+  document.getElementById('imodall').classList.add('on');
+}
+function closeIntakeModal(){ document.getElementById('imodall').classList.remove('on'); }
+function pickIntakeType(t){
+  I_TYPE=t;
+  ['Water','Coffee/Tea','Soda/Juice','Alcohol'].forEach(k=>{
+    const id='it-'+k.split('/')[0].toLowerCase();
+    document.getElementById(id).classList.toggle('ca',I_TYPE===k);
+  });
+}
+async function quickIntake(amt){
+  let finalAmt=amt;
+  if(PROF.unit==='imp') finalAmt=Math.round(amt/29.5735); // Approx ml to oz
+  await dbPut({ts:Date.now(),amt:finalAmt,type:'Water',unit:PROF.unit==='metric'?'ml':'oz'},SI);
+  alert(`Logged ${finalAmt}${PROF.unit==='metric'?'ml':'oz'} Water`);
+  renderLog(); renderStats();
+}
+async function saveIntake(){
+  const amt=parseFloat(document.getElementById('i-amt').value);
+  if(!amt){ alert('Enter amount'); return; }
+  await dbPut({ts:Date.now(),amt,type:I_TYPE,unit:PROF.unit==='metric'?'ml':'oz'},SI);
+  closeIntakeModal();
+  renderLog(); renderStats();
+}
 
 // ══ INIT ══
 openDB().then(async()=>{
@@ -1176,6 +1472,7 @@ openDB().then(async()=>{
     document.getElementById('ob').classList.remove('active');
     showScreen('tracker');
   }
+  await loadProfile();
   renderTracker();
   setInterval(renderTracker,60000);
 });
