@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#040810">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Stream Tracker</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&family=Exo+2:wght@300;400;600;700&display=swap');
+
+:root {
+  --bg:#040810; --surface:#080f1c; --card:#0d1828; --card2:#101f30;
+  --border:#162436; --border2:#1e344f;
+  --accent:#00d4ff; --accent2:#0055ff;
+  --green:#00ffb3; --yellow:#ffd93d; --orange:#ff8c00; --red:#ff3d6b;
+  --text:#f0f8ff; --muted:#8ab4cc; --muted2:#6a96b0;
+  --logo-a:#00d4ff; --logo-b:#0055ff;
+  --hold-bg:#0d1828; --hold-press:#092040;
+  --mono:'Share Tech Mono',monospace;
+  --display:'Orbitron',sans-serif;
+  --body:'Exo 2',sans-serif;
+}
+[data-theme="light"] {
+  --bg:#f0f4f8; --surface:#fff; --card:#e8eef5; --card2:#dde5ee;
+  --border:#c5d3e0; --border2:#b0c4d8;
+  --accent:#0077cc; --accent2:#0044aa;
+  --green:#00a878; --yellow:#d4a000; --orange:#c96800; --red:#cc2244;
+  --text:#0a1628; --muted:#4a6070; --muted2:#6a8090;
+  --logo-a:#0077cc; --logo-b:#0044aa;
+  --hold-bg:#e8eef5; --hold-press:#d0e4f4;
+}
+[data-theme="golden"] {
+  --bg:transparent; --surface:rgba(12,8,0,0.82); --card:rgba(18,12,0,0.78); --card2:rgba(24,16,0,0.72);
+  --border:rgba(180,120,0,0.25); --border2:rgba(220,160,0,0.35);
+  --accent:#ffd700; --accent2:#c8860a;
+  --green:#d4ff00; --yellow:#ffd700; --orange:#ff9500; --red:#ff5555;
+  --text:#fff8dc; --muted:#d4a84b; --muted2:#b08830;
+  --logo-a:#ffd700; --logo-b:#ff9500;
+  --hold-bg:rgba(18,12,0,0.85); --hold-press:rgba(30,20,0,0.9);
+}
+
+/* ── GOLDEN BACKGROUND ── */
+[data-theme="golden"] body {
+  background: #140a00;
+}
+#gold-bg {
+  display:none;
+  position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+}
+[data-theme="golden"] #gold-bg { display:block; }
+
+/* Animated radial gradient base */
+#gold-bg::before {
+  content:'';
+  position:absolute; inset:-20%;
+  background: radial-gradient(ellipse at 40% 50%, #3d2200 0%, #1f1000 35%, #0e0700 60%, #160c00 100%);
+  animation: goldpulse 8s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+@keyframes goldpulse {
+  0%   { background: radial-gradient(ellipse at 40% 50%, #3d2200 0%, #1f1000 35%, #0e0700 65%, #160c00 100%); }
+  25%  { background: radial-gradient(ellipse at 60% 40%, #4a2900 0%, #261500 35%, #100800 65%, #1c1000 100%); }
+  50%  { background: radial-gradient(ellipse at 50% 60%, #3f2500 0%, #221200 35%, #0d0600 65%, #180d00 100%); }
+  75%  { background: radial-gradient(ellipse at 35% 45%, #452700 0%, #241400 35%, #0f0700 65%, #1a0e00 100%); }
+  100% { background: radial-gradient(ellipse at 55% 55%, #3a2000 0%, #1d1000 35%, #0c0600 65%, #150b00 100%); }
+}
+
+/* Shimmer sweep */
+#gold-bg::after {
+  content:'';
+  position:absolute; inset:0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,200,50,0.04) 48%, rgba(255,215,0,0.07) 50%, rgba(255,200,50,0.04) 52%, transparent 70%);
+  animation: goldsweep 6s ease-in-out infinite;
+  transform: translateX(-100%);
+}
+@keyframes goldsweep {
+  0%   { transform: translateX(-100%); opacity:0; }
+  10%  { opacity:1; }
+  90%  { opacity:1; }
+  100% { transform: translateX(100%); opacity:0; }
+}
+
+/* ── GLITTER ── */
+.glitter-dot {
+  position:absolute;
+  border-radius:50%;
+  background:#fff;
+  animation: glitter-fade var(--dur,3s) ease-in-out var(--delay,0s) infinite;
+  opacity:0;
+  pointer-events:none;
+}
+.glitter-star {
+  position:absolute;
+  color:#ffd700;
+  font-size:var(--sz,10px);
+  animation: star-twinkle var(--dur,4s) ease-in-out var(--delay,0s) infinite;
+  opacity:0;
+  pointer-events:none;
+  user-select:none;
+  line-height:1;
+}
+@keyframes glitter-fade {
+  0%,100% { opacity:0; transform:scale(0.5); }
+  40%,60% { opacity:0.75; transform:scale(1); }
+}
+@keyframes star-twinkle {
+  0%,100% { opacity:0; transform:scale(0.4) rotate(0deg); }
+  45%,55% { opacity:0.6; transform:scale(1) rotate(20deg); }
+}
+
+/* Ensure all screens sit above gold bg */
+[data-theme="golden"] .screen,
+[data-theme="golden"] nav,
+[data-theme="golden"] .moverlay,
+[data-theme="golden"] #cel { position:fixed; }
+[data-theme="golden"] .screen { position:absolute; }
+[data-theme="golden"] #ob { background:transparent; }
+
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html, body { height:100%; background:var(--bg); color:var(--text); font-family:var(--body); overflow:hidden; overscroll-behavior:none; }
+
+/* SCREENS */
+.screen { position:absolute; inset:0; display:flex; flex-direction:column; overflow:hidden; opacity:0; pointer-events:none; transition:opacity .25s; }
+.screen.active { opacity:1; pointer-events:all; }
+.scroll-body { flex:1; overflow-y:auto; padding-bottom:72px; -webkit-overflow-scrolling:touch; }
+.scroll-body::-webkit-scrollbar { display:none; }
+
+/* NAV */
+nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-inset-bottom,4px); background:var(--surface); border-top:1px solid var(--border); position:fixed; bottom:0; left:0; right:0; z-index:50; }
+.nb { flex:1; padding:8px 0 4px; background:none; border:none; color:var(--muted); font-family:var(--body); font-size:.66rem; letter-spacing:1.5px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px; text-transform:uppercase; }
+.nb .ico { font-size:1.3rem; }
+.nb.on { color:var(--accent); }
+
+/* SHARED */
+.ph { padding:14px 18px 8px; display:flex; justify-content:space-between; align-items:flex-end; }
+.pt { font-family:var(--display); font-size:1.3rem; letter-spacing:3px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.1; }
+.ps { font-size:.65rem; color:var(--muted); letter-spacing:1px; text-align:right; line-height:1.8; }
+
+.srow { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; padding:0 14px 12px; }
+.sbox { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px 8px; text-align:center; position:relative; overflow:hidden; }
+.sbox::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--accent2),var(--accent)); }
+.sv { font-family:var(--display); font-size:1.3rem; color:var(--accent); line-height:1; }
+.sl { font-size:.58rem; color:var(--muted); letter-spacing:1.5px; margin-top:4px; text-transform:uppercase; }
+
+/* ONBOARDING */
+#ob { z-index:200; background:var(--bg); align-items:center; justify-content:flex-end; padding-bottom:44px; }
+.sw { flex:1; width:100%; overflow:hidden; }
+.st { display:flex; height:100%; transition:transform .4s cubic-bezier(.4,0,.2,1); }
+.sl2 { min-width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:28px; gap:18px; text-align:center; }
+.si { font-size:4.5rem; line-height:1; }
+.stt { font-family:var(--display); font-size:1.5rem; letter-spacing:3px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.sb { font-size:.9rem; color:var(--muted); line-height:1.8; max-width:290px; }
+.sb strong { color:var(--text); }
+.dots { display:flex; gap:8px; margin-bottom:14px; }
+.dot { width:8px; height:8px; border-radius:50%; background:var(--border2); transition:background .3s,transform .3s; }
+.dot.on { background:var(--accent); transform:scale(1.3); }
+.obbtn { width:calc(100% - 48px); padding:14px; border-radius:14px; border:none; background:linear-gradient(135deg,var(--accent2),var(--accent)); color:#fff; font-family:var(--display); font-size:.95rem; letter-spacing:3px; cursor:pointer; }
+.obbtn:active { opacity:.85; transform:scale(.98); }
+
+/* TRACKER */
+#tracker { padding-top:env(safe-area-inset-top,8px); align-items:center; }
+.th { width:100%; padding:12px 18px 6px; display:flex; justify-content:space-between; align-items:center; }
+.logo { font-family:var(--display); font-size:1.1rem; letter-spacing:4px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.2; }
+.thright { display:flex; flex-direction:column; align-items:flex-end; gap:5px; }
+.tbtn { background:var(--card); border:1.5px solid var(--border2); border-radius:20px; padding:5px 12px; cursor:pointer; color:var(--text); font-family:var(--mono); font-size:.58rem; letter-spacing:1px; }
+.tbtn:active { border-color:var(--accent); }
+.hdate { font-size:.62rem; color:var(--muted); text-align:right; line-height:1.8; font-family:var(--mono); }
+
+.lw { display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 20px 4px; width:100%; }
+.timer { font-family:var(--display); font-size:2.9rem; letter-spacing:2px; color:var(--green); text-shadow:0 0 28px #00ffb355; line-height:1; min-height:50px; display:flex; align-items:center; justify-content:center; transition:color .3s; }
+.timer.idle { color:var(--muted); text-shadow:none; }
+.timer.grace { color:var(--yellow); text-shadow:0 0 20px #ffd93d55; }
+.slbl { font-size:.7rem; letter-spacing:3px; color:var(--muted); text-transform:uppercase; min-height:16px; font-family:var(--mono); }
+.slbl.on { color:var(--green); animation:blink 1s infinite; }
+.slbl.gr { color:var(--yellow); animation:blink .5s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+.ba { display:flex; flex-direction:column; align-items:center; gap:12px; padding:6px 0 10px; width:100%; }
+.ho { width:198px; height:198px; border-radius:50%; display:flex; align-items:center; justify-content:center; position:relative; cursor:pointer; user-select:none; touch-action:none; }
+.ring { position:absolute; inset:-10px; border-radius:50%; border:2px solid var(--accent); opacity:0; transform:scale(.94); transition:opacity .3s,transform .3s; }
+.ho.pressing .ring { opacity:1; transform:scale(1); animation:pr 1.4s ease-in-out infinite; }
+.ho.grace .ring { border-color:var(--yellow); opacity:1; animation:prg .7s ease-in-out infinite; }
+@keyframes pr { 0%{box-shadow:0 0 0 0 #00d4ff33} 70%{box-shadow:0 0 0 22px transparent} 100%{box-shadow:0 0 0 0 transparent} }
+@keyframes prg { 0%{box-shadow:0 0 0 0 #ffd93d55} 70%{box-shadow:0 0 0 16px transparent} 100%{box-shadow:0 0 0 0 transparent} }
+.hi { width:180px; height:180px; border-radius:50%; background:var(--hold-bg); border:3px solid var(--border2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; transition:background .2s,border-color .2s,transform .12s; box-shadow:0 10px 50px #00000060,inset 0 1px 0 #ffffff08; }
+.ho.pressing .hi { background:var(--hold-press); border-color:var(--accent); transform:scale(.96); }
+.ho.grace .hi { border-color:var(--yellow); }
+.hem { font-size:2.7rem; line-height:1; }
+.hlbl { font-family:var(--mono); font-size:.62rem; color:var(--muted); letter-spacing:1.5px; text-align:center; line-height:1.7; padding:0 14px; }
+.ho.pressing .hlbl { color:var(--accent); }
+.ho.grace .hlbl { color:var(--yellow); }
+.hint { font-size:.65rem; color:var(--muted); letter-spacing:1px; text-align:center; font-family:var(--mono); }
+
+/* CELEBRATION */
+#cel { position:fixed; inset:0; z-index:400; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#000000ee; opacity:0; pointer-events:none; transition:opacity .4s; padding:24px 20px; gap:16px; overflow-y:auto; }
+#cel.on { opacity:1; pointer-events:all; }
+#cel canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.ctitle { font-family:var(--display); font-size:2rem; letter-spacing:4px; background:linear-gradient(135deg,#ffd93d,#ff8c00,#ff3d6b,#00d4ff); background-size:300%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:shimmer 2s linear infinite; text-align:center; position:relative; z-index:1; filter:drop-shadow(0 0 20px #ffd93d88); }
+@keyframes shimmer { 0%{background-position:0%} 100%{background-position:300%} }
+.ctip { background:#0d1828ee; border:1px solid #1e344f; border-left:4px solid #00d4ff; border-radius:14px; padding:13px 16px; font-family:var(--mono); font-size:.75rem; line-height:1.8; color:#f0f8ff; text-align:center; position:relative; z-index:1; max-width:340px; width:100%; }
+.ctip-lbl { font-size:.52rem; color:#00d4ff; letter-spacing:2px; margin-bottom:5px; text-transform:uppercase; }
+.cfact { background:#080f1cee; border:1px solid #1e344f; border-radius:14px; padding:12px 16px; font-family:var(--body); font-size:.73rem; line-height:1.7; color:#8ab4cc; text-align:center; position:relative; z-index:1; max-width:340px; width:100%; }
+.cfact-lbl { font-size:.52rem; color:#ffd93d; letter-spacing:2px; margin-bottom:4px; text-transform:uppercase; }
+.cphoto { position:relative; z-index:1; max-width:140px; border-radius:12px; overflow:hidden; border:2px solid #ffd93d88; }
+.cphoto img { width:100%; display:block; }
+.cdismiss { position:relative; z-index:1; background:none; border:1.5px solid #3d5a73; border-radius:30px; padding:11px 32px; color:#8ab4cc; font-family:var(--mono); font-size:.68rem; letter-spacing:2px; cursor:pointer; margin-top:4px; }
+.cdismiss:active { border-color:#00d4ff; color:#00d4ff; }
+
+/* MODAL SHARED */
+.moverlay { position:fixed; inset:0; background:#000000cc; z-index:100; display:flex; align-items:flex-end; opacity:0; pointer-events:none; transition:opacity .3s; }
+.moverlay.on { opacity:1; pointer-events:all; }
+.msheet { width:100%; background:var(--surface); border-radius:22px 22px 0 0; border-top:1px solid var(--border2); padding:0 20px 36px; transform:translateY(100%); transition:transform .38s cubic-bezier(.32,.72,0,1); max-height:92vh; overflow-y:auto; }
+.msheet::-webkit-scrollbar { display:none; }
+.moverlay.on .msheet { transform:translateY(0); }
+.mhandle { width:38px; height:4px; background:var(--border2); border-radius:2px; margin:12px auto 16px; }
+.mtitle { font-family:var(--display); font-size:1.1rem; letter-spacing:3px; color:var(--text); margin-bottom:2px; }
+.msub { font-size:.65rem; color:var(--muted); letter-spacing:2px; margin-bottom:14px; font-family:var(--mono); }
+
+/* RATING MODAL */
+.sumbox { background:var(--card); border-radius:12px; padding:12px 16px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; border-left:3px solid var(--green); }
+.sumdur { font-family:var(--display); font-size:1.8rem; color:var(--green); }
+.summeta { font-size:.63rem; color:var(--muted); text-align:right; line-height:1.9; font-family:var(--mono); }
+.rsec { margin-bottom:13px; }
+.rlbl { font-size:.65rem; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-bottom:7px; font-family:var(--mono); }
+.thumbrow { display:flex; gap:10px; }
+.tbtn2 { flex:1; padding:12px; border-radius:12px; border:2px solid var(--border2); background:var(--card); font-size:1.5rem; cursor:pointer; text-align:center; transition:border-color .2s,background .2s; }
+.tbtn2:active { transform:scale(.93); }
+.sup { border-color:var(--green) !important; background:color-mix(in srgb,var(--green) 8%,transparent) !important; }
+.sdn { border-color:var(--red) !important; background:color-mix(in srgb,var(--red) 8%,transparent) !important; }
+.driprow { display:flex; gap:10px; }
+.dbtn { flex:1; padding:10px 8px; border-radius:12px; border:2px solid var(--border2); background:var(--card); font-family:var(--mono); font-size:.72rem; letter-spacing:1px; color:var(--muted); cursor:pointer; text-align:center; transition:all .2s; }
+.dbtn:active { transform:scale(.93); }
+.sdy { border-color:var(--red) !important; color:var(--red) !important; background:color-mix(in srgb,var(--red) 8%,transparent) !important; }
+.sdn2 { border-color:var(--green) !important; color:var(--green) !important; background:color-mix(in srgb,var(--green) 8%,transparent) !important; }
+.chiprow { display:flex; gap:7px; flex-wrap:wrap; }
+.chip { padding:7px 13px; border-radius:20px; border:1.5px solid var(--border2); background:var(--card); font-family:var(--mono); font-size:.68rem; letter-spacing:1px; color:var(--muted); cursor:pointer; white-space:nowrap; transition:all .18s; }
+.chip:active { transform:scale(.92); }
+.chip.ca { border-color:var(--accent); color:var(--accent); background:color-mix(in srgb,var(--accent) 8%,transparent); }
+.chip.cw { border-color:var(--orange); color:var(--orange); background:color-mix(in srgb,var(--orange) 8%,transparent); }
+.chip.cb { border-color:var(--red); color:var(--red); background:color-mix(in srgb,var(--red) 8%,transparent); }
+.crow { display:flex; gap:7px; }
+.csw { flex:1; height:44px; border-radius:10px; border:3px solid transparent; cursor:pointer; transition:transform .15s,border-color .15s; display:flex; align-items:flex-end; justify-content:center; padding-bottom:3px; }
+.csw span { font-size:.5rem; font-family:var(--mono); color:#00000088; font-weight:700; }
+.csw.on { border-color:#fff; transform:scale(1.08); }
+.c1{background:#fefde8;} .c2{background:#ffe566;} .c3{background:#ffc107;} .c4{background:#e68900;} .c5{background:#a0560a;}
+.c5 span { color:#ffffff88; }
+.ni { width:100%; padding:10px 12px; border-radius:10px; border:1.5px solid var(--border2); background:var(--card); color:var(--text); font-family:var(--mono); font-size:.7rem; outline:none; resize:none; transition:border-color .2s; }
+.ni:focus { border-color:var(--accent); }
+.ni::placeholder { color:var(--muted2); }
+.cambtn { width:100%; padding:11px; border-radius:12px; border:1.5px dashed var(--border2); background:var(--card); color:var(--muted); font-family:var(--mono); font-size:.7rem; letter-spacing:1px; cursor:pointer; text-align:center; display:flex; align-items:center; justify-content:center; gap:8px; }
+.cambtn:active { border-color:var(--accent); color:var(--accent); }
+.cambtnrow { display:flex; gap:8px; }
+.camprev { margin-top:10px; border-radius:10px; overflow:hidden; max-height:160px; display:none; position:relative; }
+.camprev img { width:100%; display:block; object-fit:cover; max-height:160px; }
+.camprev.on { display:block; }
+.camx { position:absolute; top:6px; right:6px; background:#000000bb; border:none; border-radius:50%; width:26px; height:26px; color:#fff; font-size:.8rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.savebtn { width:100%; padding:13px; border-radius:14px; border:none; background:linear-gradient(135deg,var(--accent2),var(--accent)); color:#fff; font-family:var(--display); font-size:.95rem; letter-spacing:3px; cursor:pointer; margin-top:14px; }
+.savebtn:active { opacity:.85; transform:scale(.98); }
+.skipbtn { width:100%; padding:9px; border:none; background:none; color:var(--muted); font-family:var(--mono); font-size:.68rem; letter-spacing:1px; cursor:pointer; margin-top:4px; }
+
+/* LOG */
+#logscreen { padding-top:env(safe-area-inset-top,0); }
+.dnav { display:flex; align-items:center; justify-content:space-between; padding:0 14px 10px; }
+.dnbtn { width:34px; height:34px; border-radius:8px; border:1px solid var(--border2); background:var(--card); color:var(--text); font-size:.85rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.dnbtn:disabled { opacity:.2; cursor:default; }
+.dnlbl { font-family:var(--mono); font-size:.72rem; color:var(--accent); letter-spacing:2px; }
+.logtbar { display:flex; justify-content:flex-end; padding:0 14px 10px; }
+.cdaybtn { background:none; border:1px solid var(--red); border-radius:8px; color:var(--red); font-family:var(--mono); font-size:.63rem; letter-spacing:1px; padding:6px 14px; cursor:pointer; }
+.loglist { display:flex; flex-direction:column; gap:8px; padding:0 14px; }
+.logitem { background:var(--card); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:12px; padding:12px 14px; display:grid; grid-template-columns:1fr auto auto; gap:4px; align-items:start; animation:fi .22s ease; transition:opacity .25s,transform .25s; }
+.logitem.del { opacity:0; transform:translateX(60px); }
+@keyframes fi { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
+.lit { font-size:.65rem; color:var(--muted); letter-spacing:1px; font-family:var(--mono); }
+.lid { font-family:var(--display); font-size:1.35rem; color:var(--accent); line-height:1; }
+.lir { text-align:right; font-family:var(--mono); font-size:.68rem; color:var(--muted2); grid-column:2; }
+.lidelbtn { grid-column:3; grid-row:1/3; display:flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:8px; border:1px solid color-mix(in srgb,var(--red) 30%,transparent); background:none; color:color-mix(in srgb,var(--red) 50%,transparent); font-size:.95rem; cursor:pointer; margin-left:6px; align-self:center; }
+.lidelbtn:active { background:color-mix(in srgb,var(--red) 15%,transparent); color:var(--red); }
+.badges { display:flex; gap:5px; flex-wrap:wrap; margin-top:6px; grid-column:1/4; }
+.badge { font-size:.6rem; padding:3px 7px; border-radius:20px; border:1px solid var(--border2); color:var(--muted); font-family:var(--mono); letter-spacing:1px; }
+.badge.g { border-color:var(--green); color:var(--green); }
+.badge.r { border-color:var(--red); color:var(--red); }
+.badge.y { border-color:var(--yellow); color:var(--yellow); }
+.badge.o { border-color:var(--orange); color:var(--orange); }
+.linote { grid-column:1/4; font-size:.64rem; color:var(--muted); font-style:italic; margin-top:5px; line-height:1.5; }
+.liphoto { grid-column:1/4; margin-top:8px; border-radius:8px; overflow:hidden; }
+.liphoto img { width:100%; display:block; max-height:120px; object-fit:cover; border-radius:8px; }
+.liaddphoto { grid-column:1/4; margin-top:6px; background:none; border:1px dashed var(--border2); border-radius:8px; color:var(--muted); font-family:var(--mono); font-size:.58rem; letter-spacing:1px; padding:5px 10px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; }
+.liaddphoto:active { border-color:var(--accent); color:var(--accent); }
+.emptymsg { text-align:center; color:var(--muted); font-size:.72rem; letter-spacing:1px; padding:40px 0; font-family:var(--mono); }
+
+/* STATS */
+#statsscreen { padding-top:env(safe-area-inset-top,0); }
+.biggrid { display:grid; grid-template-columns:1fr 1fr; gap:9px; padding:0 14px 14px; }
+.bigbox { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px 12px; position:relative; overflow:hidden; }
+.bigbox::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--accent2),var(--accent)); }
+.bigval { font-family:var(--display); font-size:1.7rem; color:var(--accent); line-height:1; }
+.biglbl { font-size:.58rem; color:var(--muted); letter-spacing:1.5px; margin-top:5px; text-transform:uppercase; }
+.sectitle { font-size:.68rem; letter-spacing:2px; color:var(--muted); text-transform:uppercase; padding:4px 14px 8px; font-family:var(--mono); }
+.insights { display:flex; flex-direction:column; gap:8px; padding:0 14px 14px; }
+.icard { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px 14px; display:flex; align-items:center; gap:12px; }
+.idot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.idot.green{background:var(--green);} .idot.yellow{background:var(--yellow);} .idot.red{background:var(--red);} .idot.muted{background:var(--muted2);}
+.itxt .ititle { font-size:.68rem; color:var(--text); font-weight:600; margin-bottom:2px; }
+.itxt .ibody { font-size:.6rem; color:var(--muted); line-height:1.5; font-family:var(--mono); }
+.heatmap { display:grid; grid-template-columns:repeat(24,1fr); gap:2px; padding:0 14px 4px; }
+.hmcell { height:26px; border-radius:3px; background:var(--card2); }
+.hmlbls { display:flex; justify-content:space-between; padding:0 14px 14px; }
+.hmlbl { font-size:.55rem; color:var(--muted); font-family:var(--mono); }
+.histwrap { display:flex; align-items:flex-end; gap:5px; padding:0 14px; height:68px; }
+.histbar { flex:1; border-radius:5px 5px 0 0; min-height:4px; transition:height .5s ease; }
+.histlbls { display:flex; gap:5px; padding:4px 14px 14px; }
+.histlbl { flex:1; text-align:center; font-size:.58rem; color:var(--muted); font-family:var(--mono); }
+.trendbars { display:flex; gap:5px; padding:0 14px; align-items:flex-end; height:72px; }
+.trendbar { flex:1; border-radius:4px 4px 0 0; background:var(--accent2); opacity:.65; min-height:4px; transition:height .5s ease; }
+.trendbar.td { opacity:1; background:var(--accent); }
+.trendlbls { display:flex; gap:5px; padding:3px 14px 14px; }
+.trendlbl { flex:1; text-align:center; font-size:.55rem; color:var(--muted); font-family:var(--mono); }
+.pdfrow { padding:0 14px 8px; }
+.pdfbtnrow { display:flex; gap:6px; margin-bottom:8px; }
+.pdfrbtn { flex:1; padding:9px 4px; border-radius:10px; border:1.5px solid var(--border2); background:var(--card); color:var(--muted); font-family:var(--mono); font-size:.6rem; letter-spacing:1px; cursor:pointer; text-align:center; transition:all .2s; }
+.pdfrbtn.on { border-color:var(--accent); color:var(--accent); background:color-mix(in srgb,var(--accent) 8%,transparent); }
+.exprow { display:flex; gap:8px; padding:0 14px 28px; flex-wrap:wrap; }
+.exbtn { flex:1; min-width:80px; padding:11px 8px; border-radius:12px; border:1.5px solid var(--border2); background:var(--card); color:var(--text); font-family:var(--mono); font-size:.7rem; letter-spacing:1px; cursor:pointer; text-align:center; transition:border-color .2s,background .2s; }
+.exbtn:active { border-color:var(--accent); background:var(--card2); }
+.exbtn.pdf { border-color:var(--green); color:var(--green); }
+
+/* PHOTO EDIT MODAL */
+.peimg-wrap { border-radius:12px; overflow:hidden; margin-bottom:12px; max-height:200px; display:none; }
+.peimg-wrap.on { display:block; }
+.peimg-wrap img { width:100%; object-fit:cover; max-height:200px; display:block; }
+.pelbl { font-size:.58rem; color:var(--muted); font-family:var(--mono); letter-spacing:1px; margin-bottom:6px; text-transform:uppercase; }
+.pebtnrow { display:flex; gap:8px; margin-bottom:8px; }
+.pecambtn { flex:1; padding:11px 8px; border-radius:11px; border:1.5px dashed var(--border2); background:var(--card); color:var(--muted); font-family:var(--mono); font-size:.66rem; letter-spacing:1px; cursor:pointer; text-align:center; transition:border-color .2s,color .2s; }
+.pecambtn:active { border-color:var(--accent); color:var(--accent); }
+.pesave { width:100%; padding:13px; border-radius:12px; border:none; background:linear-gradient(135deg,var(--accent2),var(--accent)); color:#fff; font-family:var(--display); font-size:.9rem; letter-spacing:2px; cursor:pointer; margin-top:8px; opacity:.35; pointer-events:none; }
+.pesave.ready { opacity:1; pointer-events:all; }
+.pesave:active { opacity:.85; }
+.permove { width:100%; padding:10px; border-radius:10px; border:1.5px solid var(--red); background:none; color:var(--red); font-family:var(--mono); font-size:.63rem; letter-spacing:1px; cursor:pointer; margin-top:6px; display:none; }
+.permove.on { display:block; }
+.pecancel { width:100%; padding:10px; border:none; background:none; color:var(--muted); font-family:var(--mono); font-size:.63rem; letter-spacing:1px; cursor:pointer; margin-top:2px; }
+</style>
+</head>
+<body>
+
+<!-- GOLDEN BACKGROUND + GLITTER (only visible in golden theme) -->
+<div id="gold-bg" aria-hidden="true"></div>
+
+<!-- CELEBRATION -->
+<div id="cel">
+  <canvas id="fwc"></canvas>
+  <div class="ctitle">💧 URINE NICE!</div>
+  <div class="ctip"><div class="ctip-lbl">💡 Hydration Tip</div><div id="celTip"></div></div>
+  <div class="cfact"><div class="cfact-lbl">🧠 Did You Know?</div><div id="celFact"></div></div>
+  <div class="cphoto" id="celPhotoWrap"><img id="celPhoto" src="" alt=""></div>
+  <button class="cdismiss" onclick="closeCel()">TAP TO CONTINUE</button>
+</div>
+
+<!-- ONBOARDING -->
+<div class="screen active" id="ob">
+  <div class="sw">
+    <div class="st" id="strack">
+      <div class="sl2"><div class="si">💧</div><div class="stt">STREAM TRACKER</div><div class="sb">Your private urination health log. <strong>Track duration, color, symptoms</strong> — and share real data with your doctor.</div></div>
+      <div class="sl2"><div class="si">🔘</div><div class="stt">HOW IT WORKS</div><div class="sb"><strong>Press and hold</strong> the button when you start urinating.<br><strong>Release</strong> when you're done.<br>Rate your session. That's it.</div></div>
+      <div class="sl2"><div class="si">🔒</div><div class="stt">YOUR DATA</div><div class="sb">Everything stays <strong>on your device</strong>. No accounts. No cloud. No ads.<br>Export a PDF anytime for your doctor.</div></div>
+    </div>
+  </div>
+  <div class="dots"><div class="dot on" id="d0"></div><div class="dot" id="d1"></div><div class="dot" id="d2"></div></div>
+  <button class="obbtn" id="obbtn" onclick="obNext()">NEXT</button>
+</div>
+
+<!-- TRACKER -->
+<div class="screen" id="tracker">
+  <div class="th">
+    <div class="logo">STREAM<br>TRACKER</div>
+    <div class="thright">
+      <button class="tbtn" id="themebtn" onclick="cycleTheme()">🌙 DARK</button>
+      <div class="hdate" id="hdate"></div>
+    </div>
+  </div>
+  <div class="srow">
+    <div class="sbox"><div class="sv" id="tc">0</div><div class="sl">Sessions</div></div>
+    <div class="sbox"><div class="sv" id="tt">0:00</div><div class="sl">Total</div></div>
+    <div class="sbox"><div class="sv" id="ta">—</div><div class="sl">Avg</div></div>
+  </div>
+  <div class="lw">
+    <div class="timer idle" id="timerdiv">0:00.0</div>
+    <div class="slbl" id="slbl">READY</div>
+  </div>
+  <div class="ba">
+    <div class="ho" id="holdbtn">
+      <div class="ring"></div>
+      <div class="hi">
+        <div class="hem">💧</div>
+        <div class="hlbl">PRESS AND HOLD<br>WHEN URINATING</div>
+      </div>
+    </div>
+    <div class="hint">Release when done</div>
+  </div>
+</div>
+
+<!-- LOG -->
+<div class="screen" id="logscreen">
+  <div class="ph"><div class="pt">SESSION LOG</div><div class="ps" id="logdate"></div></div>
+  <div class="dnav">
+    <button class="dnbtn" id="dprev" onclick="changeDay(-1)">◀</button>
+    <div class="dnlbl" id="dnlbl">TODAY</div>
+    <button class="dnbtn" id="dnext" onclick="changeDay(1)" disabled>▶</button>
+  </div>
+  <div class="srow">
+    <div class="sbox"><div class="sv" id="lc">0</div><div class="sl">Sessions</div></div>
+    <div class="sbox"><div class="sv" id="lt">0:00</div><div class="sl">Total</div></div>
+    <div class="sbox"><div class="sv" id="la">—</div><div class="sl">Avg</div></div>
+  </div>
+  <div class="logtbar"><button class="cdaybtn" onclick="clearDay()">🗑 Clear Day</button></div>
+  <div class="scroll-body"><div class="loglist" id="loglist"></div></div>
+</div>
+
+<!-- STATS -->
+<div class="screen" id="statsscreen">
+  <div class="ph"><div class="pt">ANALYTICS</div><div class="ps">INSIGHTS</div></div>
+  <div class="scroll-body">
+    <div class="sectitle">🩺 HEALTH INSIGHTS</div>
+    <div class="insights" id="insights"></div>
+    <div class="biggrid">
+      <div class="bigbox"><div class="bigval" id="at">0</div><div class="biglbl">Total Sessions</div></div>
+      <div class="bigbox"><div class="bigval" id="ati">0:00</div><div class="biglbl">Stream Time</div></div>
+      <div class="bigbox"><div class="bigval" id="aav">—</div><div class="biglbl">Avg Duration</div></div>
+      <div class="bigbox"><div class="bigval" id="adr">—</div><div class="biglbl">Drip-Free Rate</div></div>
+      <div class="bigbox"><div class="bigval" id="aln">—</div><div class="biglbl">Longest Stream</div></div>
+      <div class="bigbox"><div class="bigval" id="ady">0</div><div class="biglbl">Days Tracked</div></div>
+    </div>
+    <div class="sectitle">⏰ TIME-OF-DAY HEATMAP</div>
+    <div class="heatmap" id="heatmap"></div>
+    <div class="hmlbls"><span class="hmlbl">12AM</span><span class="hmlbl">6AM</span><span class="hmlbl">12PM</span><span class="hmlbl">6PM</span><span class="hmlbl">11PM</span></div>
+    <div class="sectitle">📅 7-DAY TREND</div>
+    <div class="trendbars" id="trendbars"></div>
+    <div class="trendlbls" id="trendlbls"></div>
+    <div class="sectitle">🎨 URINE COLOR DISTRIBUTION</div>
+    <div class="histwrap" id="histwrap"></div>
+    <div class="histlbls"><div class="histlbl">Clear</div><div class="histlbl">Pale</div><div class="histlbl">Yellow</div><div class="histlbl">Dark</div><div class="histlbl">Amber</div></div>
+    <div class="sectitle">📄 DOCTOR EXPORT</div>
+    <div class="pdfrow">
+      <div class="pdfbtnrow">
+        <button class="pdfrbtn on" data-r="7"  onclick="setPdfR(7)">Last 7 Days</button>
+        <button class="pdfrbtn"    data-r="30" onclick="setPdfR(30)">Last 30 Days</button>
+        <button class="pdfrbtn"    data-r="0"  onclick="setPdfR(0)">All Time</button>
+      </div>
+    </div>
+    <div class="exprow">
+      <button class="exbtn pdf" onclick="exportPDF()">📄 PDF</button>
+      <button class="exbtn"     onclick="exportJSON()">⬇ JSON</button>
+      <button class="exbtn"     onclick="document.getElementById('impfile').click()">⬆ Import</button>
+      <button class="exbtn"     onclick="clearAll()">🗑 Clear</button>
+    </div>
+    <input type="file" id="impfile" accept=".json" style="display:none" onchange="handleImport(event)">
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <button class="nb" id="nav-tracker" onclick="showScreen('tracker')"><span class="ico">💧</span>TRACK</button>
+  <button class="nb" id="nav-log"     onclick="showScreen('log')"><span class="ico">📋</span>LOG</button>
+  <button class="nb" id="nav-stats"   onclick="showScreen('stats')"><span class="ico">📊</span>STATS</button>
+</nav>
+
+<!-- RATING MODAL -->
+<div class="moverlay" id="rmodal">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">SESSION DONE</div>
+    <div class="msub">RATE YOUR STREAM</div>
+    <div class="sumbox">
+      <div><div class="sumdur" id="sdur">0:00.0</div><div style="font-size:.58rem;color:var(--muted);margin-top:2px;letter-spacing:1px;font-family:var(--mono)">DURATION</div></div>
+      <div class="summeta" id="smeta"></div>
+    </div>
+    <div class="rsec"><div class="rlbl">Overall?</div>
+      <div class="thumbrow"><button class="tbtn2" id="tup" onclick="pick('thumb','up')">👍</button><button class="tbtn2" id="tdn" onclick="pick('thumb','down')">👎</button></div>
+    </div>
+    <div class="rsec"><div class="rlbl">Any drip on pants?</div>
+      <div class="driprow"><button class="dbtn" id="dyes" onclick="pick('drip','yes')">💦 YES</button><button class="dbtn" id="dno" onclick="pick('drip','no')">✅ CLEAN</button></div>
+    </div>
+    <div class="rsec"><div class="rlbl">Any symptoms?</div>
+      <div class="chiprow">
+        <div class="chip" id="ch-urgency" onclick="toggleChip('urgency')">⚡ Urgent</div>
+        <div class="chip" id="ch-pain"    onclick="toggleChip('pain')">🔥 Pain/Burn</div>
+        <div class="chip" id="ch-weak"    onclick="toggleChip('weak')">📉 Weak Stream</div>
+        <div class="chip" id="ch-none"    onclick="toggleChip('none')">✅ None</div>
+      </div>
+    </div>
+    <div class="rsec"><div class="rlbl">Urine Color · 1=Clear · 5=Dark Amber</div>
+      <div class="crow">
+        <div class="csw c1" onclick="pick('color',1)"><span>1</span></div>
+        <div class="csw c2" onclick="pick('color',2)"><span>2</span></div>
+        <div class="csw c3" onclick="pick('color',3)"><span>3</span></div>
+        <div class="csw c4" onclick="pick('color',4)"><span>4</span></div>
+        <div class="csw c5" onclick="pick('color',5)"><span>5</span></div>
+      </div>
+    </div>
+    <div class="rsec"><div class="rlbl">Notes (optional)</div>
+      <textarea class="ni" id="notes" rows="2" placeholder="After coffee, felt pressure, unusual smell..."></textarea>
+    </div>
+    <div class="rsec"><div class="rlbl">Photo (optional)</div>
+      <div class="cambtnrow">
+        <button class="cambtn" style="flex:1" onclick="openCam('main')">📷 Camera</button>
+        <button class="cambtn" style="flex:1" onclick="openGal('main')">🖼 Gallery</button>
+      </div>
+      <div class="camprev" id="mainprev"><img id="mainprevimg" src="" alt=""><button class="camx" onclick="clearMainPhoto()">✕</button></div>
+    </div>
+    <button class="savebtn" onclick="saveSession(true)">SAVE SESSION</button>
+    <button class="skipbtn" onclick="saveSession(false)">Skip rating</button>
+  </div>
+</div>
+
+<!-- PHOTO EDIT MODAL -->
+<div class="moverlay" id="pemodal">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">ADD PHOTO</div>
+    <div class="msub" id="pesub">SESSION</div>
+    <div class="pelbl" id="pecurlbl" style="display:none">Current photo</div>
+    <div class="peimg-wrap" id="pecurwrap"><img id="pecurimg" src="" alt=""></div>
+    <div class="pelbl">New photo</div>
+    <div class="pebtnrow">
+      <button class="pecambtn" onclick="openCam('pe')">📷 Camera</button>
+      <button class="pecambtn" onclick="openGal('pe')">🖼 Gallery</button>
+    </div>
+    <div class="camprev" id="peprev"><img id="peprevimg" src="" alt=""><button class="camx" onclick="clearPePhoto()">✕</button></div>
+    <button class="pesave" id="pesavebtn" onclick="savePePhoto()">SAVE PHOTO</button>
+    <button class="permove on" id="permovebtn" onclick="removePePhoto()" style="display:none">🗑 Remove photo</button>
+    <button class="pecancel" onclick="closePeModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- FILE INPUTS -->
+<input type="file" id="camMain" accept="image/*" capture="environment" style="display:none" onchange="handlePhotoFile(event,'main')">
+<input type="file" id="galMain" accept="image/*"                       style="display:none" onchange="handlePhotoFile(event,'main')">
+<input type="file" id="camPe"   accept="image/*" capture="environment" style="display:none" onchange="handlePhotoFile(event,'pe')">
+<input type="file" id="galPe"   accept="image/*"                       style="display:none" onchange="handlePhotoFile(event,'pe')">
+
+<script>
+// ══ FACTS ══
+const FACTS=[
+  "The average adult produces 1–2 litres of urine per day.",
+  "Urine is about 95% water — the rest is dissolved salts, urea, and other waste compounds.",
+  "Fresh urine from a healthy person contains very few bacteria and is largely harmless.",
+  "The yellow colour of urine comes from urochrome, produced when old red blood cells break down.",
+  "You can survive only 3–5 days without water — far less time than without food.",
+  "Your kidneys filter about 200 litres of blood every single day.",
+  "Each kidney contains about 1 million filtering units called nephrons.",
+  "Drinking water before meals can reduce calorie intake and support weight management.",
+  "The human bladder can comfortably hold between 400–600 ml of urine.",
+  "The first urge to urinate typically occurs when the bladder is about one-quarter full.",
+  "Taking B vitamins can turn urine bright neon yellow — completely harmless.",
+  "Eating beets can turn urine pink or red — a harmless condition called beeturia.",
+  "Asparagus gives urine a distinctive smell due to asparagusic acid breaking down into sulfur compounds.",
+  "Not everyone can detect the asparagus smell in their urine — the ability is genetic.",
+  "The average person urinates 6–8 times per 24 hours.",
+  "Caffeine is a mild diuretic — it increases urine production.",
+  "Alcohol suppresses the hormone ADH, which is why drinking leads to more urination and dehydration.",
+  "By the time you feel thirsty, you may already be mildly dehydrated.",
+  "Even 1–2% dehydration can noticeably reduce physical and mental performance.",
+  "Water makes up about 60% of the adult human body.",
+  "Infants are born at about 75% water by body weight.",
+  "Dark brown or tea-coloured urine can be a sign of liver problems.",
+  "Persistently cloudy urine may indicate a urinary tract infection.",
+  "The male urethra is about 20 cm long; the female urethra is only about 4 cm.",
+  "Women are more prone to UTIs partly due to their shorter urethra.",
+  "World Toilet Day is observed every year on November 19.",
+  "Alexander Cumming patented the first valve-based flush toilet in 1775.",
+  "Ancient Romans used communal toilets called foricae, often with no privacy walls.",
+  "Japan leads the world in high-tech toilet innovation, including heated seats and bidets.",
+  "The toilet system on the International Space Station cost approximately $23 million.",
+  "Urine on the ISS is purified and recycled into drinking water.",
+  "The Indus Valley Civilisation had flush toilets connected to drainage systems as far back as 2500 BCE.",
+  "Staying well hydrated significantly reduces the risk of developing kidney stones.",
+  "The kidneys help regulate blood pressure by controlling the body's fluid volume.",
+  "The kidneys produce erythropoietin (EPO), which tells bone marrow to make more red blood cells.",
+  "Medieval physicians diagnosed illness by observing the colour, smell, and taste of urine.",
+  "Sweet-smelling urine was a historical clue for diabetes mellitus before blood sugar tests existed.",
+  "The word diabetes comes from Greek, meaning to pass through — a reference to excessive urination.",
+  "The hormone ADH signals the kidneys to conserve water and produce concentrated urine.",
+  "Urea, the main nitrogen waste in urine, is used in fertilisers and moisturising skincare.",
+  "Uric acid in urine, when it crystallises in joints, causes the painful condition known as gout.",
+  "The 8 glasses of water a day guideline is not based on rigorous science — needs vary widely.",
+  "Pale yellow urine is the most reliable everyday sign of good hydration.",
+  "Hyponatremia — dangerously low blood sodium from too much plain water — is a risk for endurance athletes.",
+  "Kegel exercises strengthen the pelvic floor muscles and can improve bladder control.",
+  "Nocturia — waking more than once per night to urinate — is linked to poor sleep quality.",
+  "Overactive bladder affects about 1 in 6 adults.",
+  "Blood in the urine is one of the key early warning signs of bladder cancer.",
+  "Enlarged prostate is a common cause of weak or interrupted urine stream in men over 50.",
+  "UTIs account for roughly 8 million doctor visits per year in the United States.",
+  "Toilet paper was first commercially produced in the United States in 1857.",
+  "Bidets dramatically reduce toilet paper use and are standard in much of Europe and Asia.",
+  "Toilets account for nearly 30% of indoor household water consumption in the US.",
+  "Human urine contains nitrogen, phosphorus, and potassium — all useful as plant fertiliser.",
+  "The idea of breaking the seal is a myth — alcohol is simply a diuretic.",
+  "Fear of urinating in public is called paruresis, or shy bladder syndrome.",
+  "Urinating after sex can help flush bacteria from the urethra and may reduce UTI risk.",
+  "A full adult bladder is roughly the size of a softball.",
+  "A normal peak urine flow rate for a healthy adult male is approximately 15–25 mL per second.",
+  "Stress urinary incontinence — leaking when laughing or sneezing — is extremely common.",
+  "About 1 in 3 women experience some form of urinary incontinence at some point in their lives.",
+  "Habitually holding urine for very long periods can gradually stretch the bladder.",
+  "Low-flow toilets can save a household up to 20,000 litres of water per year.",
+  "London's Great Stink of 1858 directly triggered the construction of modern sewers.",
+  "About 3.5 billion people worldwide still lack access to safely managed sanitation.",
+  "Dehydration is one of the most common and underappreciated causes of daytime fatigue.",
+  "Mild dehydration can produce headaches clinically similar to tension headaches.",
+  "D-mannose, a simple sugar found in some fruits, shows promise in preventing certain UTIs.",
+  "Interstitial cystitis causes chronic bladder pain and frequency without any infection.",
+  "The first commercial urine dipstick tests were developed in the 1950s.",
+  "A healthy adult should urinate roughly every 2–4 hours during waking hours.",
+  "Diabetes insipidus causes extreme water loss through urine due to a hormonal problem.",
+  "Researchers have used diluted human urine as fertiliser for barley with comparable yields.",
+  // Science
+  "A teaspoon of neutron star material would weigh about 10 million tonnes.",
+  "Honey never spoils. Archaeologists have found 3,000-year-old honey in Egyptian tombs still edible.",
+  "The human brain contains roughly 86 billion neurons, each forming thousands of connections.",
+  "Lightning strikes Earth approximately 100 times every second.",
+  "Octopuses have three hearts, blue blood, and neurons distributed through their arms.",
+  "The mantis shrimp has 16 types of colour receptors — compared to the human eye's three.",
+  "A day on Venus is longer than a year on Venus.",
+  "Cleopatra lived closer in time to the Moon landing than to the construction of the Great Pyramid.",
+  "The Milky Way galaxy contains an estimated 100–400 billion stars.",
+  "Trees share nutrients through underground fungal networks called mycorrhizae.",
+  "Water is the only common substance that expands when it freezes — which is why ice floats.",
+  "The speed of light is about 299,792 km/s — fast enough to circle Earth 7.5 times per second.",
+  "Tardigrades can survive the vacuum of space, extreme radiation, and near-absolute-zero temperatures.",
+  "Sharks are older than trees — sharks appeared about 450 million years ago; trees evolved around 360 million years ago.",
+  "A single strand of spider silk is stronger by weight than steel.",
+  "The coldest temperature ever recorded on Earth was −89.2°C at Vostok Station, Antarctica.",
+  "Bananas are mildly radioactive due to potassium-40 — at completely harmless levels.",
+  "Crows can recognise individual human faces and have been observed holding grudges for years.",
+  "Sound travels about 4 times faster through water than through air.",
+  "The human eye can distinguish approximately 10 million different colours.",
+  "A group of flamingos is called a flamboyance.",
+  "Photosynthesis produces every oxygen molecule you breathe.",
+  "The average cloud weighs about 500,000 kg — tiny water droplets fall too slowly to see.",
+  "The James Webb Space Telescope can observe galaxies from over 13 billion years ago.",
+  // Art & Culture
+  "Leonardo da Vinci wrote most of his personal notes in mirror script — right to left.",
+  "Blue was almost absent from Western art until the 13th century, when lapis lazuli became accessible.",
+  "Michelangelo was still creating architectural drawings for St. Peter's Basilica at age 88.",
+  "Van Gogh sold only one painting during his lifetime — The Red Vineyard — for 400 Belgian francs.",
+  "The Mona Lisa has no visible eyebrows — it was fashionable in Renaissance Florence to shave them.",
+  "Shakespeare is credited with inventing over 1,700 words still in use today, including 'bedroom' and 'lonely'.",
+  "Beethoven continued composing masterworks, including his Ninth Symphony, after becoming completely deaf.",
+  "Claude Monet painted his Water Lilies series while suffering from severe cataracts.",
+  "The word photography literally means writing with light.",
+  "The Eiffel Tower grows about 15 cm taller in summer due to thermal expansion.",
+  "The first known novel is widely considered to be The Tale of Genji, written around 1000 CE.",
+  "Hokusai, creator of The Great Wave, produced over 30,000 artworks in his lifetime.",
+  "Frida Kahlo did not start painting seriously until she was bedridden after a bus accident at 18.",
+  "Bach had 20 children — several became accomplished composers themselves.",
+  "The Great Wall of China was built in sections over approximately 2,000 years by multiple dynasties.",
+  "The word pixel comes from picture element and was first used in digital imaging research in the 1960s."
+];
+
+const HTIPS=[
+  "💧 Crystal clear — you might be over-hydrating. Ease back slightly.",
+  "✅ Pale yellow — perfect hydration. Keep it up!",
+  "👍 Yellow — normal and healthy. Stay on track.",
+  "⚠️ Dark yellow — drink a glass of water soon.",
+  "🚨 Amber/Orange — you may be dehydrated. Drink water now."
+];
+
+// ══ ONBOARDING ══
+let obSlide=0;
+function obNext(){
+  if(obSlide<2){
+    obSlide++;
+    document.getElementById('strack').style.transform=`translateX(-${obSlide*100}%)`;
+    [0,1,2].forEach(i=>document.getElementById('d'+i).classList.toggle('on',i===obSlide));
+    if(obSlide===2) document.getElementById('obbtn').textContent="LET'S PISS 💧";
+  } else {
+    localStorage.setItem('st_ob','1');
+    document.getElementById('ob').classList.remove('active');
+    showScreen('tracker');
+  }
+}
+let obTx=null;
+document.getElementById('strack').addEventListener('touchstart',e=>{obTx=e.touches[0].clientX;},{passive:true});
+document.getElementById('strack').addEventListener('touchend',e=>{if(obTx!==null&&e.changedTouches[0].clientX-obTx<-40)obNext();obTx=null;},{passive:true});
+
+// ══ THEMES ══
+const THEMES=[{k:'',i:'🌙',l:'DARK'},{k:'light',i:'☀️',l:'LIGHT'},{k:'golden',i:'👑',l:'GOLDEN'}];
+let themeIdx=0;
+
+function buildGlitter(){
+  const bg=document.getElementById('gold-bg');
+  bg.innerHTML=''; // clear existing
+  const W=window.innerWidth, H=window.innerHeight;
+
+  // 25 white sparkle dots
+  for(let i=0;i<25;i++){
+    const el=document.createElement('div');
+    el.className='glitter-dot';
+    const size=(Math.random()*2+0.8).toFixed(1);
+    el.style.cssText=[
+      `left:${(Math.random()*95).toFixed(1)}%`,
+      `top:${(Math.random()*95).toFixed(1)}%`,
+      `width:${size}px`,
+      `height:${size}px`,
+      `--dur:${(Math.random()*3+2).toFixed(1)}s`,
+      `--delay:-${(Math.random()*5).toFixed(1)}s`,
+    ].join(';');
+    bg.appendChild(el);
+  }
+
+  // 12 gold star shapes
+  const STARS=['✦','✧','★','✺','✸'];
+  for(let i=0;i<12;i++){
+    const el=document.createElement('div');
+    el.className='glitter-star';
+    el.textContent=STARS[Math.floor(Math.random()*STARS.length)];
+    const sz=Math.floor(Math.random()*7+6);
+    el.style.cssText=[
+      `left:${(Math.random()*93).toFixed(1)}%`,
+      `top:${(Math.random()*93).toFixed(1)}%`,
+      `--sz:${sz}px`,
+      `--dur:${(Math.random()*4+3).toFixed(1)}s`,
+      `--delay:-${(Math.random()*6).toFixed(1)}s`,
+    ].join(';');
+    bg.appendChild(el);
+  }
+}
+
+function applyTheme(i){
+  themeIdx=i;
+  document.documentElement.setAttribute('data-theme',THEMES[i].k);
+  document.getElementById('themebtn').textContent=`${THEMES[i].i} ${THEMES[i].l}`;
+  localStorage.setItem('st_theme',i);
+  if(THEMES[i].k==='golden') buildGlitter();
+}
+function cycleTheme(){ applyTheme((themeIdx+1)%3); }
+
+// ══ INDEXEDDB ══
+const DBN='StreamTrackerDB', SN='sessions';
+let db=null;
+function openDB(){
+  return new Promise((res,rej)=>{
+    const r=indexedDB.open(DBN,1);
+    r.onupgradeneeded=e=>{ if(!e.target.result.objectStoreNames.contains(SN)) e.target.result.createObjectStore(SN,{keyPath:'ts'}); };
+    r.onsuccess=e=>{ db=e.target.result; res(); };
+    r.onerror=rej;
+  });
+}
+function dbAll(){ return new Promise((res,rej)=>{ const r=db.transaction(SN,'readonly').objectStore(SN).getAll(); r.onsuccess=()=>res(r.result||[]); r.onerror=rej; }); }
+function dbPut(s){ return new Promise((res,rej)=>{ const r=db.transaction(SN,'readwrite').objectStore(SN).put(s); r.onsuccess=res; r.onerror=rej; }); }
+function dbDel(ts){ return new Promise((res,rej)=>{ const r=db.transaction(SN,'readwrite').objectStore(SN).delete(ts); r.onsuccess=res; r.onerror=rej; }); }
+function dbClear(){ return new Promise((res,rej)=>{ const r=db.transaction(SN,'readwrite').objectStore(SN).clear(); r.onsuccess=res; r.onerror=rej; }); }
+
+function dayKey(off=0){ const d=new Date(); d.setDate(d.getDate()+off); return d.toISOString().slice(0,10); }
+function sKey(ts){ return new Date(ts).toISOString().slice(0,10); }
+
+async function migrate(){
+  const old=localStorage.getItem('st_v5')||localStorage.getItem('st_v4')||localStorage.getItem('st_v3');
+  if(!old) return;
+  try{ const data=JSON.parse(old); const flat=Object.values(data).flat(); for(const s of flat){ try{await dbPut(s);}catch(e){} } ['st_v5','st_v4','st_v3'].forEach(k=>localStorage.removeItem(k)); }catch(e){}
+}
+
+// ══ SCREENS ══
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById(name==='log'?'logscreen':name==='stats'?'statsscreen':'tracker').classList.add('active');
+  document.getElementById('nav-'+name).classList.add('on');
+  if(name==='log') renderLog();
+  if(name==='stats') renderStats();
+}
+
+// ══ FIREWORKS ══
+let fwOn=false,fwP=[],fwRaf=null,fwInt=null;
+const fwc=document.getElementById('fwc'),fwx=fwc.getContext('2d');
+function rfwc(){ fwc.width=window.innerWidth; fwc.height=window.innerHeight; }
+window.addEventListener('resize',()=>{ rfwc(); if(themeIdx===2) buildGlitter(); }); rfwc();
+function lfw(){ const x=Math.random()*fwc.width,y=40+Math.random()*fwc.height*.45; const cols=['#00d4ff','#00ffb3','#ffd93d','#ff3d6b','#ff8c00','#fff','#ffd700']; const c=cols[Math.floor(Math.random()*cols.length)]; for(let i=0;i<70;i++){ const a=Math.random()*Math.PI*2,sp=1.5+Math.random()*4.5; fwP.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,a:1,c,sz:1.8+Math.random()*2.2,d:.011+Math.random()*.012}); } }
+function afw(){ if(!fwOn)return; fwx.fillStyle='rgba(0,0,0,0.16)'; fwx.fillRect(0,0,fwc.width,fwc.height); fwP.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.055;p.vx*=.985;p.a-=p.d;fwx.globalAlpha=Math.max(0,p.a);fwx.fillStyle=p.c;fwx.beginPath();fwx.arc(p.x,p.y,p.sz,0,Math.PI*2);fwx.fill();}); fwx.globalAlpha=1; fwP=fwP.filter(p=>p.a>0); fwRaf=requestAnimationFrame(afw); }
+function startFw(){ fwOn=true;fwP=[];fwx.clearRect(0,0,fwc.width,fwc.height);lfw();lfw();lfw();fwInt=setInterval(()=>{lfw();lfw();},700);afw(); }
+function stopFw(){ fwOn=false;clearInterval(fwInt);cancelAnimationFrame(fwRaf);fwx.clearRect(0,0,fwc.width,fwc.height);fwP=[]; }
+
+// ══ CELEBRATION ══
+let lastFact=-1;
+function rFact(){ let i; do{i=Math.floor(Math.random()*FACTS.length);}while(i===lastFact); lastFact=i; return FACTS[i]; }
+function showCel(colorVal,photo){
+  document.getElementById('celTip').textContent=colorVal?HTIPS[colorVal-1]:'💧 Stay hydrated — aim for pale yellow urine throughout the day.';
+  document.getElementById('celFact').textContent=rFact();
+  const pw=document.getElementById('celPhotoWrap');
+  if(photo){ document.getElementById('celPhoto').src=photo; pw.style.display='block'; } else { pw.style.display='none'; }
+  document.getElementById('cel').classList.add('on');
+  startFw();
+}
+function closeCel(){ document.getElementById('cel').classList.remove('on'); stopFw(); }
+
+// ══ HOLD + GRACE ══
+let sStart=null,acc=0,rafId=null,gTimer=null,streaming=false,inGrace=false,pendDur=0;
+const GRACE=1500;
+const hbtn=document.getElementById('holdbtn'),tdiv=document.getElementById('timerdiv'),slbl=document.getElementById('slbl');
+function elapsed(){ return acc+(streaming?(performance.now()-sStart)/1000:0); }
+function startStream(e){
+  if(e) e.preventDefault();
+  if(inGrace){ clearTimeout(gTimer);gTimer=null;inGrace=false;sStart=performance.now();streaming=true;hbtn.classList.remove('grace');hbtn.classList.add('pressing');tdiv.className='timer';slbl.textContent='● URINATING';slbl.className='slbl on';tick();return; }
+  if(streaming) return;
+  streaming=true;acc=0;sStart=performance.now();hbtn.classList.add('pressing');tdiv.className='timer';slbl.textContent='● URINATING';slbl.className='slbl on';tick();
+}
+function stopStream(e){
+  if(e) e.preventDefault();
+  if(!streaming) return;
+  acc+=(performance.now()-sStart)/1000;sStart=null;streaming=false;cancelAnimationFrame(rafId);
+  inGrace=true;hbtn.classList.remove('pressing');hbtn.classList.add('grace');tdiv.className='timer grace';slbl.textContent='● HOLD TO RESUME';slbl.className='slbl gr';
+  gTimer=setTimeout(()=>{ inGrace=false;hbtn.classList.remove('grace');tdiv.className='timer idle';tdiv.textContent='0:00.0';slbl.textContent='READY';slbl.className='slbl';pendDur=acc;acc=0;openRating(); },GRACE);
+}
+function tick(){ tdiv.textContent=fmtT(elapsed()); rafId=requestAnimationFrame(tick); }
+hbtn.addEventListener('mousedown',startStream); hbtn.addEventListener('mouseup',stopStream); hbtn.addEventListener('mouseleave',e=>{if(streaming)stopStream(e);}); hbtn.addEventListener('touchstart',startStream,{passive:false}); hbtn.addEventListener('touchend',stopStream,{passive:false}); hbtn.addEventListener('touchcancel',stopStream,{passive:false}); hbtn.addEventListener('contextmenu',e=>e.preventDefault());
+
+// ══ FORMAT ══
+function fmtT(s){ const m=Math.floor(s/60),sc=Math.floor(s%60),t=Math.floor((s%1)*10); return `${m}:${String(sc).padStart(2,'0')}.${t}`; }
+function fmtS(s){ const m=Math.floor(s/60),sc=Math.floor(s%60); return m>0?`${m}:${String(sc).padStart(2,'0')}`:`0:${String(sc).padStart(2,'0')}`; }
+function fmtDate(ts){ return new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+
+// ══ PHOTO HANDLING ══
+let mainPhoto=null, pePhoto=null, peTargetTs=null;
+
+function openCam(ctx){ document.getElementById(ctx==='main'?'camMain':'camPe').click(); }
+function openGal(ctx){ document.getElementById(ctx==='main'?'galMain':'galPe').click(); }
+
+function compressPhoto(file, cb){
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{
+      const MAX=240, scale=Math.min(1,MAX/img.width);
+      const c=document.createElement('canvas');
+      c.width=Math.round(img.width*scale); c.height=Math.round(img.height*scale);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      cb(c.toDataURL('image/jpeg',.65));
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function handlePhotoFile(e,ctx){
+  const file=e.target.files[0]; if(!file) return;
+  compressPhoto(file, data=>{
+    if(ctx==='main'){
+      mainPhoto=data;
+      document.getElementById('mainprevimg').src=data;
+      document.getElementById('mainprev').classList.add('on');
+    } else {
+      pePhoto=data;
+      document.getElementById('peprevimg').src=data;
+      document.getElementById('peprev').classList.add('on');
+      document.getElementById('pesavebtn').classList.add('ready');
+    }
+  });
+  e.target.value='';
+}
+
+function clearMainPhoto(){
+  mainPhoto=null;
+  document.getElementById('mainprevimg').src='';
+  document.getElementById('mainprev').classList.remove('on');
+}
+
+// ══ RATING ══
+let R={};
+function resetR(){
+  R={thumb:null,drip:null,color:null,urgency:false,pain:false,weak:false,noSym:false};
+  document.getElementById('tup').className='tbtn2';
+  document.getElementById('tdn').className='tbtn2';
+  document.getElementById('dyes').className='dbtn';
+  document.getElementById('dno').className='dbtn';
+  document.querySelectorAll('.csw').forEach(s=>s.classList.remove('on'));
+  ['urgency','pain','weak','none'].forEach(k=>document.getElementById('ch-'+k).className='chip');
+  document.getElementById('notes').value='';
+  clearMainPhoto();
+}
+function pick(key,val){
+  R[key]=val;
+  if(key==='thumb'){ document.getElementById('tup').className='tbtn2'+(val==='up'?' sup':''); document.getElementById('tdn').className='tbtn2'+(val==='down'?' sdn':''); }
+  if(key==='drip'){ document.getElementById('dyes').className='dbtn'+(val==='yes'?' sdy':''); document.getElementById('dno').className='dbtn'+(val==='no'?' sdn2':''); }
+  if(key==='color'){ document.querySelectorAll('.csw').forEach((s,i)=>s.classList.toggle('on',i+1===val)); }
+}
+function toggleChip(key){
+  if(key==='none'){ R.urgency=false;R.pain=false;R.weak=false;R.noSym=!R.noSym;['urgency','pain','weak'].forEach(k=>document.getElementById('ch-'+k).className='chip');document.getElementById('ch-none').className='chip'+(R.noSym?' ca':''); }
+  else { R[key]=!R[key];R.noSym=false;document.getElementById('ch-none').className='chip';const cls={urgency:'cw',pain:'cb',weak:'cw'}[key];document.getElementById('ch-'+key).className='chip'+(R[key]?' '+cls:''); }
+}
+
+function openRating(){
+  resetR();
+  document.getElementById('sdur').textContent=fmtT(pendDur);
+  const now=new Date();
+  document.getElementById('smeta').innerHTML=now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+'<br>'+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('rmodal').classList.add('on');
+}
+function closeRating(){ document.getElementById('rmodal').classList.remove('on'); }
+
+async function saveSession(withR){
+  const cv=withR?R.color:null;
+  const photo=withR?mainPhoto:null;
+  const notes=withR?document.getElementById('notes').value.trim():'';
+  const s={ts:Date.now(),dur:Math.round(pendDur*10)/10,thumb:withR?R.thumb:null,drip:withR?R.drip:null,color:cv,urgency:withR?R.urgency:false,pain:withR?R.pain:false,weak:withR?R.weak:false};
+  if(notes) s.notes=notes;
+  if(photo) s.photo=photo;
+  await dbPut(s);
+  closeRating();
+  renderTracker();
+  setTimeout(()=>showCel(cv,photo),350);
+}
+
+// ══ TRACKER ══
+async function renderTracker(){
+  const all=await dbAll();
+  const ss=all.filter(s=>sKey(s.ts)===dayKey(0));
+  const tot=ss.reduce((a,s)=>a+s.dur,0);
+  document.getElementById('tc').textContent=ss.length;
+  document.getElementById('tt').textContent=fmtS(tot);
+  document.getElementById('ta').textContent=ss.length?fmtS(tot/ss.length):'—';
+  const now=new Date();
+  document.getElementById('hdate').innerHTML=now.toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric'})+'<br>'+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+
+// ══ LOG ══
+let vOff=0;
+function changeDay(d){ vOff=Math.min(0,vOff+d); renderLog(); }
+const CLABELS=['','Clear','Pale Yellow','Yellow','Dark Yellow','Dark Amber'];
+const CDOTS=['','⚪','🟡','🟡','🟠','🟤'];
+
+async function deleteSession(ts){
+  if(!confirm('Delete this session? This cannot be undone.')) return;
+  const el=document.querySelector(`.logitem[data-ts="${ts}"]`);
+  if(el) el.classList.add('del');
+  setTimeout(async()=>{ await dbDel(ts); renderLog(); renderTracker(); },280);
+}
+
+async function clearDay(){
+  if(!confirm('Clear all sessions for this day?')) return;
+  const all=await dbAll();
+  for(const s of all.filter(x=>sKey(x.ts)===dayKey(vOff))) await dbDel(s.ts);
+  renderLog(); renderTracker();
+}
+
+async function renderLog(){
+  const all=await dbAll();
+  const ss=all.filter(s=>sKey(s.ts)===dayKey(vOff)).sort((a,b)=>b.ts-a.ts);
+  const tot=ss.reduce((a,s)=>a+s.dur,0);
+  document.getElementById('lc').textContent=ss.length;
+  document.getElementById('lt').textContent=fmtS(tot);
+  document.getElementById('la').textContent=ss.length?fmtS(tot/ss.length):'—';
+  document.getElementById('dnext').disabled=vOff>=0;
+  const dl={0:'TODAY','-1':'YESTERDAY'};
+  const d=new Date(); d.setDate(d.getDate()+vOff);
+  document.getElementById('dnlbl').textContent=dl[vOff]||d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  document.getElementById('logdate').innerHTML=new Date().toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric'})+'<br>'+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  const list=document.getElementById('loglist');
+  if(!ss.length){ list.innerHTML='<div class="emptymsg">NO SESSIONS THIS DAY</div>'; return; }
+  list.innerHTML=ss.map((s,i)=>{
+    const t=new Date(s.ts);
+    const ts2=t.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    let b='';
+    if(s.thumb==='up')   b+='<span class="badge g">👍 Good</span>';
+    if(s.thumb==='down') b+='<span class="badge r">👎 Poor</span>';
+    if(s.drip==='yes')   b+='<span class="badge r">💦 Drip</span>';
+    if(s.drip==='no')    b+='<span class="badge g">✅ Clean</span>';
+    if(s.urgency)        b+='<span class="badge o">⚡ Urgent</span>';
+    if(s.pain)           b+='<span class="badge r">🔥 Pain</span>';
+    if(s.weak)           b+='<span class="badge y">📉 Weak</span>';
+    if(s.color)          b+=`<span class="badge">${CDOTS[s.color]} ${CLABELS[s.color]}</span>`;
+    return `<div class="logitem" data-ts="${s.ts}">
+      <div><div class="lit">#${ss.length-i} · ${ts2}</div><div class="lid">${fmtT(s.dur)}</div></div>
+      <div class="lir">${s.dur.toFixed(1)}s</div>
+      <button class="lidelbtn" onclick="deleteSession(${s.ts})">🗑</button>
+      ${b?`<div class="badges">${b}</div>`:''}
+      ${s.notes?`<div class="linote">📝 ${s.notes}</div>`:''}
+      ${s.photo?`<div class="liphoto"><img src="${s.photo}" alt=""></div>`:''}
+      <button class="liaddphoto" onclick="openPeModal(${s.ts})">${s.photo?'🔄 Replace photo':'📷 Add photo'}</button>
+    </div>`;
+  }).join('');
+}
+
+// ══ PHOTO EDIT MODAL ══
+async function openPeModal(ts){
+  peTargetTs=ts; pePhoto=null;
+  document.getElementById('peprevimg').src='';
+  document.getElementById('peprev').classList.remove('on');
+  document.getElementById('pesavebtn').classList.remove('ready');
+  const all=await dbAll();
+  const s=all.find(x=>x.ts===ts);
+  if(!s) return;
+  const t=new Date(s.ts);
+  document.getElementById('pesub').textContent=t.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+' · '+t.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})+' · '+fmtT(s.dur);
+  const curwrap=document.getElementById('pecurwrap');
+  const curlbl=document.getElementById('pecurlbl');
+  const rembtn=document.getElementById('permovebtn');
+  if(s.photo){ document.getElementById('pecurimg').src=s.photo; curwrap.classList.add('on'); curlbl.style.display='block'; rembtn.style.display='block'; }
+  else { curwrap.classList.remove('on'); curlbl.style.display='none'; rembtn.style.display='none'; }
+  document.getElementById('pemodal').classList.add('on');
+}
+
+function closePeModal(){
+  document.getElementById('pemodal').classList.remove('on');
+  peTargetTs=null; pePhoto=null;
+}
+
+function clearPePhoto(){
+  pePhoto=null;
+  document.getElementById('peprevimg').src='';
+  document.getElementById('peprev').classList.remove('on');
+  document.getElementById('pesavebtn').classList.remove('ready');
+}
+
+async function savePePhoto(){
+  if(!peTargetTs||!pePhoto) return;
+  const all=await dbAll();
+  const s=all.find(x=>x.ts===peTargetTs);
+  if(!s) return;
+  s.photo=pePhoto;
+  await dbPut(s);
+  closePeModal();
+  renderLog();
+}
+
+async function removePePhoto(){
+  if(!peTargetTs||!confirm('Remove photo from this session?')) return;
+  const all=await dbAll();
+  const s=all.find(x=>x.ts===peTargetTs);
+  if(!s) return;
+  delete s.photo;
+  await dbPut(s);
+  closePeModal();
+  renderLog();
+}
+
+// ══ STATS ══
+let pdfR=7;
+function setPdfR(r){ pdfR=r; document.querySelectorAll('.pdfrbtn').forEach(b=>b.classList.toggle('on',parseInt(b.dataset.r)===r)); }
+
+function buildInsights(all){
+  const cards=[];
+  const n=all.filter(s=>sKey(s.ts)===dayKey(0)).length;
+  let dot,title,body;
+  if(n===0){dot='muted';title='No sessions logged today';body='A healthy adult typically urinates 6–8 times per day.';}
+  else if(n<4){dot='yellow';title=`${n} session${n>1?'s':''} today — below average`;body='Healthy range is 6–8 per day. You may need more fluids.';}
+  else if(n<=8){dot='green';title=`${n} sessions today — on track ✓`;body="You're within the healthy range of 6–8 urinations per day.";}
+  else{dot='yellow';title=`${n} sessions today — above average`;body='More than 8 sessions/day may indicate high fluid intake or overactive bladder.';}
+  cards.push({dot,title,body});
+  const recent=all.filter(s=>s.color&&s.ts>Date.now()-14*864e5);
+  if(recent.length>=3){
+    const avg=recent.reduce((a,s)=>a+s.color,0)/recent.length;
+    if(avg<=1.8){dot='green';title='Color trend: Well hydrated';body='Your average urine color is clear/pale — ideal.';}
+    else if(avg<=2.8){dot='green';title='Color trend: Good hydration';body="Pale yellow average. You're drinking enough water.";}
+    else if(avg<=3.8){dot='yellow';title='Color trend: Moderate';body='Yellow average. Consider increasing water intake.';}
+    else{dot='red';title='Color trend: Needs attention';body='Consistently dark urine. Try to drink more water throughout the day.';}
+    cards.push({dot,title,body});
+  }
+  const rated=all.filter(s=>s.drip).sort((a,b)=>b.ts-a.ts);
+  if(rated.length>0){
+    let streak=0; for(const s of rated){ if(s.drip==='no') streak++; else break; }
+    if(streak===0){dot='red';title='Drip-free streak: broken';body='Last rated session had drip.';}
+    else if(streak<5){dot='yellow';title=`Drip-free streak: ${streak} 🎯`;body='Good start! Keep it clean.';}
+    else{dot='green';title=`Drip-free streak: ${streak} 🏆`;body="Excellent. You're a pro.";}
+    cards.push({dot,title,body});
+  }
+  if(all.length>=2){
+    const last=all.sort((a,b)=>b.ts-a.ts)[0];
+    const hrs=(Date.now()-last.ts)/36e5;
+    if(hrs>5&&hrs<20){dot='yellow';title=`${Math.round(hrs)}h since last session`;body='Going more than 4–5 waking hours without urinating may indicate dehydration.';}
+    else{dot='green';title='Session timing looks healthy';body='Regular intervals between urinations. Keep hydrating steadily.';}
+    cards.push({dot,title,body});
+  }
+  return cards;
+}
+
+async function renderStats(){
+  const all=await dbAll();
+  let tot=0,cnt=0,dFree=0,dRated=0,longest=0,days=new Set();
+  const cc=[0,0,0,0,0],hh=Array(24).fill(0),dc={};
+  all.forEach(s=>{ tot+=s.dur;cnt++;if(s.dur>longest)longest=s.dur;if(s.drip==='no')dFree++;if(s.drip)dRated++;if(s.color)cc[s.color-1]++;hh[new Date(s.ts).getHours()]++;const k=sKey(s.ts);days.add(k);dc[k]=(dc[k]||0)+1; });
+  document.getElementById('at').textContent=cnt;
+  document.getElementById('ati').textContent=fmtS(tot);
+  document.getElementById('aav').textContent=cnt?fmtS(tot/cnt):'—';
+  document.getElementById('adr').textContent=dRated?Math.round(dFree/dRated*100)+'%':'—';
+  document.getElementById('aln').textContent=longest?fmtT(longest):'—';
+  document.getElementById('ady').textContent=days.size;
+  document.getElementById('insights').innerHTML=buildInsights([...all]).map(c=>`<div class="icard"><div class="idot ${c.dot}"></div><div class="itxt"><div class="ititle">${c.title}</div><div class="ibody">${c.body}</div></div></div>`).join('');
+  const maxH=Math.max(...hh,1);
+  document.getElementById('heatmap').innerHTML=hh.map((n,h)=>{ const a=n===0?.05:.08+n/maxH*.85; const bg=n===0?'var(--card2)':`rgba(0,212,255,${a.toFixed(2)})`; return `<div class="hmcell" style="background:${bg}" title="${h}:00 — ${n}"></div>`; }).join('');
+  const d7=Array.from({length:7},(_,i)=>dayKey(i-6));
+  const dc7=d7.map(k=>dc[k]||0),maxD=Math.max(...dc7,1);
+  document.getElementById('trendbars').innerHTML=d7.map((k,i)=>`<div class="${i===6?'trendbar td':'trendbar'}" style="height:${Math.max(4,dc7[i]/maxD*100)}%"></div>`).join('');
+  document.getElementById('trendlbls').innerHTML=d7.map((k,i)=>{ const dd=new Date(k+'T12:00:00'); return `<div class="trendlbl">${i===6?'Today':dd.toLocaleDateString('en-US',{weekday:'short'})}</div>`; }).join('');
+  const maxC=Math.max(...cc,1),sw=['#fefde8','#ffe566','#ffc107','#e68900','#a0560a'];
+  document.getElementById('histwrap').innerHTML=cc.map((n,i)=>`<div class="histbar" style="height:${Math.max(4,n/maxC*100)}%;background:${sw[i]}"></div>`).join('');
+}
+
+// ══ PDF ══
+function loadJsPDF(){
+  return new Promise(res=>{
+    if(window.jspdf){res(true);return;}
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    s.onload=()=>res(true); s.onerror=()=>res(false);
+    document.head.appendChild(s);
+  });
+}
+
+async function exportPDF(){
+  const ok=await loadJsPDF();
+  if(!ok||!window.jspdf){ alert('PDF library failed to load. Check your internet connection.'); return; }
+  const {jsPDF}=window.jspdf;
+  const all=await dbAll();
+  const now=Date.now();
+  let filtered=pdfR===0?all:all.filter(s=>s.ts>=now-pdfR*864e5);
+  const label=pdfR===7?'Last 7 Days':pdfR===30?'Last 30 Days':'All Time';
+  filtered=filtered.sort((a,b)=>a.ts-b.ts);
+  if(!filtered.length){ alert('No sessions in selected range.'); return; }
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const W=210,M=18;let y=M;
+  doc.setFillColor(4,8,16);doc.rect(0,0,W,28,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(16);doc.setTextColor(0,212,255);doc.text('STREAM TRACKER',M,13);
+  doc.setFontSize(8);doc.setTextColor(138,180,204);doc.text(`Urine Health Report · ${label} · ${new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}`,M,21);
+  y=34;
+  const tot=filtered.reduce((a,s)=>a+s.dur,0);
+  const avg=filtered.length?tot/filtered.length:0;
+  const dr=filtered.filter(s=>s.drip),drfree=filtered.filter(s=>s.drip==='no');
+  doc.setFillColor(13,24,40);doc.roundedRect(M,y,W-M*2,34,3,3,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(0,212,255);doc.text('SUMMARY',M+6,y+7);
+  doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(240,248,255);
+  const sdata=[['Total Sessions',filtered.length],['Total Stream Time',fmtS(tot)],['Avg Duration',fmtS(avg)],['Drip-Free Rate',dr.length?Math.round(drfree.length/dr.length*100)+'%':'N/A'],['Date Range',`${fmtDate(filtered[0].ts)} – ${fmtDate(filtered[filtered.length-1].ts)}`],['Sessions w/ Symptoms',filtered.filter(s=>s.urgency||s.pain||s.weak).length]];
+  sdata.forEach((row,i)=>{ const col=i<3?M+6:M+(W-M*2)/2+4,r=i<3?i:i-3; doc.setTextColor(138,180,204);doc.text(row[0],col,y+14+r*7);doc.setTextColor(240,248,255);doc.text(String(row[1]),col+44,y+14+r*7); });
+  y+=40;
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(0,212,255);doc.text('SESSION LOG',M,y);y+=8;
+  const cols=[20,52,20,22,20,20,20];const hdrs=['Date/Time','Duration','Color','Drip','Urgent','Pain','Weak'];
+  doc.setFillColor(13,24,40);doc.rect(M,y-5,W-M*2,7,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(0,212,255);
+  let cx=M+2;hdrs.forEach((h,i)=>{doc.text(h,cx,y);cx+=cols[i];});y+=4;
+  doc.setFont('helvetica','normal');doc.setTextColor(220,235,248);
+  const cn=['','Clear','Pale Yel','Yellow','Dark Yel','Amber'];
+  [...filtered].reverse().forEach((s,i)=>{
+    if(y>272){doc.addPage();y=18;doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(0,212,255);let cx2=M+2;hdrs.forEach((h,j)=>{doc.text(h,cx2,y);cx2+=cols[j];});y+=6;doc.setFont('helvetica','normal');doc.setTextColor(220,235,248);}
+    if(i%2===0){doc.setFillColor(10,14,22);doc.rect(M,y-4,W-M*2,6,'F');}
+    const t=new Date(s.ts);
+    const row=[t.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+t.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),fmtT(s.dur),s.color?`${s.color} ${cn[s.color]}`:'—',s.drip==='no'?'Clean':s.drip==='yes'?'Drip':'—',s.urgency?'Yes':'—',s.pain?'Yes':'—',s.weak?'Yes':'—'];
+    doc.setFontSize(7.5);cx=M+2;row.forEach((v,j)=>{doc.text(String(v),cx,y);cx+=cols[j];});
+    if(s.notes){y+=5;doc.setTextColor(138,180,204);doc.setFontSize(7);doc.text(`  Note: ${s.notes.slice(0,80)}`,M+2,y);doc.setTextColor(220,235,248);doc.setFontSize(7.5);}
+    y+=6;
+  });
+  const pages=doc.getNumberOfPages();
+  for(let p=1;p<=pages;p++){doc.setPage(p);doc.setFontSize(7);doc.setTextColor(80,100,120);doc.text(`Stream Tracker · Page ${p} of ${pages} · Personal reference only. Consult a healthcare professional for medical advice.`,M,290);}
+  doc.save(`stream_tracker_${new Date().toISOString().slice(0,10)}.pdf`);
+}
+
+// ══ JSON EXPORT/IMPORT ══
+async function exportJSON(){ const all=await dbAll(); const b=new Blob([JSON.stringify(all,null,2)],{type:'application/json'}); const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`stream_tracker_${dayKey(0)}.json`;a.click(); }
+async function handleImport(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=async ev=>{
+    try{ const arr=JSON.parse(ev.target.result); const list=Array.isArray(arr)?arr:Object.values(arr).flat(); let n=0; for(const s of list){try{await dbPut(s);n++;}catch(err){}} alert(`✅ Imported ${n} sessions.`);renderStats();}
+    catch{alert('❌ Invalid file.');}
+  };
+  reader.readAsText(file);e.target.value='';
+}
+async function clearAll(){ if(!confirm('Delete ALL data? This cannot be undone.')) return; await dbClear(); renderTracker(); alert('All data cleared.'); }
+
+// ══ INIT ══
+openDB().then(async()=>{
+  await migrate();
+  const t=localStorage.getItem('st_theme');
+  applyTheme(t!==null?parseInt(t):0);
+  if(localStorage.getItem('st_ob')){
+    document.getElementById('ob').classList.remove('active');
+    showScreen('tracker');
+  }
+  renderTracker();
+  setInterval(renderTracker,60000);
+});
+</script>
+</body>
+</html>
