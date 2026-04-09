@@ -6,9 +6,9 @@
 <meta name="theme-color" content="#040810">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Stream Tracker</title>
+<title>Urine Tracker</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&family=Exo+2:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
   --bg:#040810; --surface:#080f1c; --card:#0d1828; --card2:#101f30;
@@ -18,9 +18,9 @@
   --text:#f0f8ff; --muted:#8ab4cc; --muted2:#6a96b0;
   --logo-a:#00d4ff; --logo-b:#0055ff;
   --hold-bg:#0d1828; --hold-press:#092040;
-  --mono:'Share Tech Mono',monospace;
-  --display:'Orbitron',sans-serif;
-  --body:'Exo 2',sans-serif;
+  --body:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  --display:'Inter',sans-serif;
 }
 [data-theme="light"] {
   --bg:#f0f4f8; --surface:#fff; --card:#e8eef5; --card2:#dde5ee;
@@ -128,50 +128,50 @@ html, body { height:100%; background:var(--bg); color:var(--text); font-family:v
 .scroll-body::-webkit-scrollbar { display:none; }
 
 /* NAV */
-nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-inset-bottom,4px); background:var(--surface); border-top:1px solid var(--border); position:fixed; bottom:0; left:0; right:0; z-index:50; }
-.nb { flex:1; padding:8px 0 4px; background:none; border:none; color:var(--muted); font-family:var(--body); font-size:.66rem; letter-spacing:1.5px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px; text-transform:uppercase; }
-.nb .ico { font-size:1.3rem; }
+nav { display:flex; justify-content:space-around; padding:8px 0 env(safe-area-inset-bottom,4px); background:var(--surface); border-top:1px solid var(--border); position:fixed; bottom:0; left:0; right:0; z-index:50; }
+.nb { flex:1; padding:8px 0 4px; background:none; border:none; color:var(--muted); font-family:var(--body); font-size:.7rem; font-weight:600; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; text-transform:uppercase; transition:color .2s; }
+.nb .ico { font-size:1.4rem; }
 .nb.on { color:var(--accent); }
 
 /* SHARED */
-.ph { padding:14px 18px 8px; display:flex; justify-content:space-between; align-items:flex-end; }
-.pt { font-family:var(--display); font-size:1.3rem; letter-spacing:3px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.1; }
-.ps { font-size:.65rem; color:var(--muted); letter-spacing:1px; text-align:right; line-height:1.8; }
+.ph { padding:18px 20px 10px; display:flex; justify-content:space-between; align-items:flex-end; }
+.pt { font-family:var(--display); font-size:1.4rem; font-weight:800; letter-spacing:-0.5px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.1; }
+.ps { font-size:.72rem; color:var(--muted); font-weight:500; text-align:right; line-height:1.8; }
 
-.srow { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; padding:0 14px 12px; }
-.sbox { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px 8px; text-align:center; position:relative; overflow:hidden; }
+.srow { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:0 16px 14px; }
+.sbox { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px 10px; text-align:center; position:relative; overflow:hidden; }
 .sbox::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--accent2),var(--accent)); }
-.sv { font-family:var(--display); font-size:1.3rem; color:var(--accent); line-height:1; }
-.sl { font-size:.58rem; color:var(--muted); letter-spacing:1.5px; margin-top:4px; text-transform:uppercase; }
+.sv { font-family:var(--display); font-size:1.4rem; font-weight:700; color:var(--accent); line-height:1; }
+.sl { font-size:.65rem; color:var(--muted); font-weight:600; margin-top:5px; text-transform:uppercase; letter-spacing:0.5px; }
 
 /* ONBOARDING */
 #ob { z-index:200; background:var(--bg); align-items:center; justify-content:flex-end; padding-bottom:44px; }
 .sw { flex:1; width:100%; overflow:hidden; }
 .st { display:flex; height:100%; transition:transform .4s cubic-bezier(.4,0,.2,1); }
-.sl2 { min-width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:28px; gap:18px; text-align:center; }
+.sl2 { min-width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px; gap:20px; text-align:center; }
 .si { font-size:4.5rem; line-height:1; }
-.stt { font-family:var(--display); font-size:1.5rem; letter-spacing:3px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-.sb { font-size:.9rem; color:var(--muted); line-height:1.8; max-width:290px; }
-.sb strong { color:var(--text); }
-.dots { display:flex; gap:8px; margin-bottom:14px; }
-.dot { width:8px; height:8px; border-radius:50%; background:var(--border2); transition:background .3s,transform .3s; }
-.dot.on { background:var(--accent); transform:scale(1.3); }
-.obbtn { width:calc(100% - 48px); padding:14px; border-radius:14px; border:none; background:linear-gradient(135deg,var(--accent2),var(--accent)); color:#fff; font-family:var(--display); font-size:.95rem; letter-spacing:3px; cursor:pointer; }
+.stt { font-family:var(--display); font-size:1.6rem; font-weight:800; letter-spacing:-0.5px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.sb { font-size:1rem; color:var(--muted); line-height:1.6; max-width:300px; }
+.sb strong { color:var(--text); font-weight:700; }
+.dots { display:flex; gap:10px; margin-bottom:18px; }
+.dot { width:9px; height:9px; border-radius:50%; background:var(--border2); transition:background .3s,transform .3s; }
+.dot.on { background:var(--accent); transform:scale(1.2); }
+.obbtn { width:calc(100% - 48px); padding:16px; border-radius:16px; border:none; background:linear-gradient(135deg,var(--accent2),var(--accent)); color:#fff; font-family:var(--display); font-size:1rem; font-weight:700; cursor:pointer; }
 .obbtn:active { opacity:.85; transform:scale(.98); }
 
 /* TRACKER */
 #tracker { padding-top:env(safe-area-inset-top,8px); align-items:center; }
-.th { width:100%; padding:12px 18px 6px; display:flex; justify-content:space-between; align-items:center; }
-.logo { font-family:var(--display); font-size:1.1rem; letter-spacing:4px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.2; }
-.thright { display:flex; flex-direction:column; align-items:flex-end; gap:5px; }
-.tbtn { background:var(--card); border:1.5px solid var(--border2); border-radius:20px; padding:5px 12px; cursor:pointer; color:var(--text); font-family:var(--mono); font-size:.58rem; letter-spacing:1px; }
+.th { width:100%; padding:14px 20px 8px; display:flex; justify-content:space-between; align-items:center; }
+.logo { font-family:var(--display); font-size:1.2rem; font-weight:800; letter-spacing:-0.5px; background:linear-gradient(135deg,var(--logo-a),var(--logo-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.1; }
+.thright { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
+.tbtn { background:var(--card); border:1.5px solid var(--border2); border-radius:10px; padding:6px 14px; cursor:pointer; color:var(--text); font-family:var(--body); font-weight:600; font-size:.65rem; }
 .tbtn:active { border-color:var(--accent); }
-.hdate { font-size:.62rem; color:var(--muted); text-align:right; line-height:1.8; font-family:var(--mono); }
+.hdate { font-size:.68rem; color:var(--muted); text-align:right; line-height:1.6; font-weight:500; }
 
-.lw { display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 20px 4px; width:100%; }
-.timer { font-family:var(--display); font-size:2.9rem; letter-spacing:2px; color:var(--green); text-shadow:0 0 28px #00ffb355; line-height:1; min-height:50px; display:flex; align-items:center; justify-content:center; transition:color .3s; }
-.timer.idle { color:var(--muted); text-shadow:none; }
-.timer.grace { color:var(--yellow); text-shadow:0 0 20px #ffd93d55; }
+.lw { display:flex; flex-direction:column; align-items:center; gap:4px; padding:10px 20px 6px; width:100%; }
+.timer { font-family:var(--display); font-size:3.4rem; font-weight:700; color:var(--green); line-height:1; min-height:60px; display:flex; align-items:center; justify-content:center; transition:color .3s; }
+.timer.idle { color:var(--muted); }
+.timer.grace { color:var(--yellow); }
 .slbl { font-size:.7rem; letter-spacing:3px; color:var(--muted); text-transform:uppercase; min-height:16px; font-family:var(--mono); }
 .slbl.on { color:var(--green); animation:blink 1s infinite; }
 .slbl.gr { color:var(--yellow); animation:blink .5s infinite; }
@@ -259,6 +259,14 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
 .savebtn { width:100%; padding:13px; border-radius:14px; border:none; background:linear-gradient(135deg,var(--accent2),var(--accent)); color:#fff; font-family:var(--display); font-size:.95rem; letter-spacing:3px; cursor:pointer; margin-top:14px; }
 .savebtn:active { opacity:.85; transform:scale(.98); }
 .skipbtn { width:100%; padding:9px; border:none; background:none; color:var(--muted); font-family:var(--mono); font-size:.68rem; letter-spacing:1px; cursor:pointer; margin-top:4px; }
+
+/* SETTINGS */
+#settingsscreen { padding-top:env(safe-area-inset-top,0); }
+.pfield { margin-bottom:14px; padding:0 14px; }
+.plbl { font-size:.62rem; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px; font-family:var(--mono); }
+.prow { display:flex; gap:10px; }
+.pbtn { flex:1; padding:10px; border-radius:10px; border:1.5px solid var(--border2); background:var(--card); color:var(--muted); font-family:var(--mono); font-size:.7rem; cursor:pointer; text-align:center; }
+.pbtn.on { border-color:var(--accent); color:var(--accent); background:color-mix(in srgb,var(--accent) 8%,transparent); }
 
 /* LOG */
 #logscreen { padding-top:env(safe-area-inset-top,0); }
@@ -361,19 +369,21 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
 <div class="screen active" id="ob">
   <div class="sw">
     <div class="st" id="strack">
-      <div class="sl2"><div class="si">💧</div><div class="stt">STREAM TRACKER</div><div class="sb">Your private urination health log. <strong>Track duration, color, symptoms</strong> — and share real data with your doctor.</div></div>
+      <div class="sl2"><div class="si">💧</div><div class="stt">URINE TRACKER</div><div class="sb">Your private urination health log. <strong>Track duration, color, and symptoms</strong> — and share real data with your doctor.</div></div>
       <div class="sl2"><div class="si">🔘</div><div class="stt">HOW IT WORKS</div><div class="sb"><strong>Press and hold</strong> the button when you start urinating.<br><strong>Release</strong> when you're done.<br>Rate your session. That's it.</div></div>
-      <div class="sl2"><div class="si">🔒</div><div class="stt">YOUR DATA</div><div class="sb">Everything stays <strong>on your device</strong>. No accounts. No cloud. No ads.<br>Export a PDF anytime for your doctor.</div></div>
+      <div class="sl2"><div class="si">🚰</div><div class="stt">HYDRATION</div><div class="sb">Log your <strong>fluid intake</strong> in the log tab to get a full picture of your bladder health.</div></div>
+      <div class="sl2"><div class="si">📋</div><div class="stt">CLINICAL REPORTS</div><div class="sb">Generate <strong>Doctor-Ready PDF reports</strong>. A professional voiding diary in your pocket.</div></div>
+      <div class="sl2"><div class="si">🔒</div><div class="stt">YOUR DATA</div><div class="sb">Everything stays <strong>on your device</strong>. No accounts. No cloud. No ads.<br>Your health data is your business.</div></div>
     </div>
   </div>
-  <div class="dots"><div class="dot on" id="d0"></div><div class="dot" id="d1"></div><div class="dot" id="d2"></div></div>
+  <div class="dots"><div class="dot on" id="d0"></div><div class="dot" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div><div class="dot" id="d4"></div></div>
   <button class="obbtn" id="obbtn" onclick="obNext()">NEXT</button>
 </div>
 
 <!-- TRACKER -->
 <div class="screen" id="tracker">
   <div class="th">
-    <div class="logo">STREAM<br>TRACKER</div>
+    <div class="logo">URINE<br>TRACKER</div>
     <div class="thright">
       <button class="tbtn" id="themebtn" onclick="cycleTheme()">🌙 DARK</button>
       <div class="hdate" id="hdate"></div>
@@ -413,14 +423,71 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
     <div class="sbox"><div class="sv" id="lt">0:00</div><div class="sl">Total</div></div>
     <div class="sbox"><div class="sv" id="la">—</div><div class="sl">Avg</div></div>
   </div>
-  <div class="logtbar"><button class="cdaybtn" onclick="clearDay()">🗑 Clear Day</button></div>
+  <div class="logtbar" style="padding:0 14px 10px; display:flex; gap:8px; flex-wrap:wrap;">
+    <button class="tbtn" style="flex:1; border-color:var(--accent); color:var(--accent);" onclick="openIntakeModal()">🥤 Log Drink</button>
+    <button class="tbtn" style="flex:1; border-color:var(--green); color:var(--green);" onclick="openManualModal()">➕ Manual Piss</button>
+    <button class="cdaybtn" style="padding:6px 10px;" onclick="clearDay()">🗑 Clear Day</button>
+  </div>
   <div class="scroll-body"><div class="loglist" id="loglist"></div></div>
+</div>
+
+<!-- SETTINGS -->
+<div class="screen" id="settingsscreen">
+  <div class="ph"><div class="pt">PROFILE</div><div class="ps">SETTINGS</div></div>
+  <div class="scroll-body">
+    <div class="sectitle">👤 USER BIOMETRICS</div>
+    <div class="pfield">
+      <div class="plbl">Weight (<span id="w-unit-lbl">kg</span>)</div>
+      <input type="number" id="p-weight" class="ni" placeholder="Weight">
+    </div>
+
+    <div class="sectitle">⚙️ PREFERENCES</div>
+    <div class="pfield">
+      <div class="plbl">Unit System</div>
+      <div class="prow">
+        <button class="pbtn" id="p-unit-metric" onclick="setUnit('metric')">METRIC (ml/kg)</button>
+        <button class="pbtn" id="p-unit-imp" onclick="setUnit('imp')">IMPERIAL (oz/lb)</button>
+      </div>
+    </div>
+
+    <div class="sectitle">🌙 SLEEP WINDOW (FOR NOCTURIA)</div>
+    <div class="pfield">
+      <div class="plbl">Bed Time</div>
+      <input type="time" id="p-bed" class="ni">
+    </div>
+    <div class="pfield">
+      <div class="plbl">Wake Time</div>
+      <input type="time" id="p-wake" class="ni">
+    </div>
+
+    <div style="padding:0 14px 20px">
+      <button class="savebtn" onclick="saveProfile()">SAVE PROFILE</button>
+    </div>
+  </div>
 </div>
 
 <!-- STATS -->
 <div class="screen" id="statsscreen">
   <div class="ph"><div class="pt">ANALYTICS</div><div class="ps">INSIGHTS</div></div>
   <div class="scroll-body">
+    <div id="clin-summary-wrap" style="padding:0 14px 14px">
+      <div class="sectitle">📋 DOCTOR'S SUMMARY (LAST 3 DAYS)</div>
+      <div class="bigbox" style="padding:0; overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; font-family:var(--mono); font-size:.65rem; color:var(--text); text-align:left;">
+          <thead style="background:var(--card2); color:var(--accent);">
+            <tr>
+              <th style="padding:8px;">Day</th>
+              <th style="padding:8px;">In</th>
+              <th style="padding:8px;">Out(s)</th>
+              <th style="padding:8px;">Max(s)</th>
+              <th style="padding:8px;">Night</th>
+            </tr>
+          </thead>
+          <tbody id="clin-body"></tbody>
+        </table>
+      </div>
+    </div>
+
     <div class="sectitle">🩺 HEALTH INSIGHTS</div>
     <div class="insights" id="insights"></div>
     <div class="biggrid">
@@ -434,9 +501,28 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
     <div class="sectitle">⏰ TIME-OF-DAY HEATMAP</div>
     <div class="heatmap" id="heatmap"></div>
     <div class="hmlbls"><span class="hmlbl">12AM</span><span class="hmlbl">6AM</span><span class="hmlbl">12PM</span><span class="hmlbl">6PM</span><span class="hmlbl">11PM</span></div>
-    <div class="sectitle">📅 7-DAY TREND</div>
+    <div class="sectitle">📅 7-DAY TREND (SESSIONS)</div>
     <div class="trendbars" id="trendbars"></div>
     <div class="trendlbls" id="trendlbls"></div>
+
+    <div class="sectitle">🚰 HYDRATION GOAL</div>
+    <div style="padding:0 14px 14px;">
+      <div class="bigbox">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div class="bigval" id="h-progress">0%</div>
+            <div class="biglbl">Today's Intake</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="lit" id="h-total">0 / 0 ml</div>
+            <div class="biglbl" id="h-goal-lbl">Goal based on weight</div>
+          </div>
+        </div>
+        <div style="width:100%; height:6px; background:var(--card2); border-radius:3px; margin-top:12px; overflow:hidden;">
+          <div id="h-bar" style="width:0%; height:100%; background:var(--accent); transition:width .5s;"></div>
+        </div>
+      </div>
+    </div>
     <div class="sectitle">🎨 URINE COLOR DISTRIBUTION</div>
     <div class="histwrap" id="histwrap"></div>
     <div class="histlbls"><div class="histlbl">Clear</div><div class="histlbl">Pale</div><div class="histlbl">Yellow</div><div class="histlbl">Dark</div><div class="histlbl">Amber</div></div>
@@ -463,6 +549,7 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
   <button class="nb" id="nav-tracker" onclick="showScreen('tracker')"><span class="ico">💧</span>TRACK</button>
   <button class="nb" id="nav-log"     onclick="showScreen('log')"><span class="ico">📋</span>LOG</button>
   <button class="nb" id="nav-stats"   onclick="showScreen('stats')"><span class="ico">📊</span>STATS</button>
+  <button class="nb" id="nav-settings" onclick="showScreen('settings')"><span class="ico">⚙️</span>SETTINGS</button>
 </nav>
 
 <!-- RATING MODAL -->
@@ -510,6 +597,64 @@ nav { display:flex; justify-content:space-around; padding:6px 0 env(safe-area-in
     </div>
     <button class="savebtn" onclick="saveSession(true)">SAVE SESSION</button>
     <button class="skipbtn" onclick="saveSession(false)">Skip rating</button>
+  </div>
+</div>
+
+<!-- MANUAL ENTRY MODAL -->
+<div class="moverlay" id="mmodal">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">MANUAL ENTRY</div>
+    <div class="msub">LOG MISSED SESSION</div>
+    <div class="rsec">
+      <div class="rlbl">Amount (One of these)</div>
+      <div style="display:flex; gap:10px;">
+        <div style="flex:1">
+          <div class="plbl" style="font-size:.55rem">Volume (<span class="vol-unit">ml</span>)</div>
+          <input type="number" id="m-vol" class="ni" placeholder="ml/oz">
+        </div>
+        <div style="flex:1">
+          <div class="plbl" style="font-size:.55rem">OR Duration (s)</div>
+          <input type="number" id="m-dur" class="ni" placeholder="seconds">
+        </div>
+      </div>
+    </div>
+    <div class="rsec">
+      <div class="rlbl">Time</div>
+      <input type="time" id="m-time" class="ni">
+    </div>
+    <div class="rsec">
+      <div class="rlbl">Options</div>
+      <div class="chiprow">
+        <div class="chip" id="m-leak" onclick="toggleMLeak()">💦 Leak / Accident</div>
+      </div>
+    </div>
+    <button class="savebtn" onclick="saveManual()">SAVE ENTRY</button>
+    <button class="skipbtn" onclick="closeManualModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- INTAKE MODAL -->
+<div class="moverlay" id="imodall">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">LOG INTAKE</div>
+    <div class="msub">FLUID INTAKE</div>
+    <div class="rsec">
+      <div class="rlbl">Amount (<span class="vol-unit">ml</span>)</div>
+      <input type="number" id="i-amt" class="ni" placeholder="Enter amount">
+    </div>
+    <div class="rsec">
+      <div class="rlbl">Type</div>
+      <div class="chiprow">
+        <div class="chip" id="it-water" onclick="pickIntakeType('Water')">💧 Water</div>
+        <div class="chip" id="it-coffee" onclick="pickIntakeType('Coffee/Tea')">☕ Coffee/Tea</div>
+        <div class="chip" id="it-soda" onclick="pickIntakeType('Soda/Juice')">🥤 Soda/Juice</div>
+        <div class="chip" id="it-alcohol" onclick="pickIntakeType('Alcohol')">🍺 Alcohol</div>
+      </div>
+    </div>
+    <button class="savebtn" onclick="saveIntake()">SAVE INTAKE</button>
+    <button class="skipbtn" onclick="closeIntakeModal()">Cancel</button>
   </div>
 </div>
 
@@ -670,11 +815,11 @@ const HTIPS=[
 // ══ ONBOARDING ══
 let obSlide=0;
 function obNext(){
-  if(obSlide<2){
+  if(obSlide<4){
     obSlide++;
     document.getElementById('strack').style.transform=`translateX(-${obSlide*100}%)`;
-    [0,1,2].forEach(i=>document.getElementById('d'+i).classList.toggle('on',i===obSlide));
-    if(obSlide===2) document.getElementById('obbtn').textContent="LET'S PISS 💧";
+    [0,1,2,3,4].forEach(i=>document.getElementById('d'+i).classList.toggle('on',i===obSlide));
+    if(obSlide===4) document.getElementById('obbtn').textContent="LET'S GO 💧";
   } else {
     localStorage.setItem('st_ob','1');
     document.getElementById('ob').classList.remove('active');
@@ -738,20 +883,26 @@ function applyTheme(i){
 function cycleTheme(){ applyTheme((themeIdx+1)%3); }
 
 // ══ INDEXEDDB ══
-const DBN='StreamTrackerDB', SN='sessions';
+const DBN='StreamTrackerDB', SN='sessions', SI='intake', SP='profile';
 let db=null;
 function openDB(){
   return new Promise((res,rej)=>{
-    const r=indexedDB.open(DBN,1);
-    r.onupgradeneeded=e=>{ if(!e.target.result.objectStoreNames.contains(SN)) e.target.result.createObjectStore(SN,{keyPath:'ts'}); };
+    const r=indexedDB.open(DBN,2);
+    r.onupgradeneeded=e=>{
+      const d=e.target.result;
+      if(!d.objectStoreNames.contains(SN)) d.createObjectStore(SN,{keyPath:'ts'});
+      if(!d.objectStoreNames.contains(SI)) d.createObjectStore(SI,{keyPath:'ts'});
+      if(!d.objectStoreNames.contains(SP)) d.createObjectStore(SP,{keyPath:'id'});
+    };
     r.onsuccess=e=>{ db=e.target.result; res(); };
     r.onerror=rej;
   });
 }
-function dbAll(){ return new Promise((res,rej)=>{ const r=db.transaction(SN,'readonly').objectStore(SN).getAll(); r.onsuccess=()=>res(r.result||[]); r.onerror=rej; }); }
-function dbPut(s){ return new Promise((res,rej)=>{ const r=db.transaction(SN,'readwrite').objectStore(SN).put(s); r.onsuccess=res; r.onerror=rej; }); }
-function dbDel(ts){ return new Promise((res,rej)=>{ const r=db.transaction(SN,'readwrite').objectStore(SN).delete(ts); r.onsuccess=res; r.onerror=rej; }); }
-function dbClear(){ return new Promise((res,rej)=>{ const r=db.transaction(SN,'readwrite').objectStore(SN).clear(); r.onsuccess=res; r.onerror=rej; }); }
+function dbAll(store=SN){ return new Promise((res,rej)=>{ const r=db.transaction(store,'readonly').objectStore(store).getAll(); r.onsuccess=()=>res(r.result||[]); r.onerror=rej; }); }
+function dbGet(key,store=SN){ return new Promise((res,rej)=>{ const r=db.transaction(store,'readonly').objectStore(store).get(key); r.onsuccess=()=>res(r.result); r.onerror=rej; }); }
+function dbPut(s,store=SN){ return new Promise((res,rej)=>{ const r=db.transaction(store,'readwrite').objectStore(store).put(s); r.onsuccess=res; r.onerror=rej; }); }
+function dbDel(ts,store=SN){ return new Promise((res,rej)=>{ const r=db.transaction(store,'readwrite').objectStore(store).delete(ts); r.onsuccess=res; r.onerror=rej; }); }
+function dbClear(store=SN){ return new Promise((res,rej)=>{ const r=db.transaction(store,'readwrite').objectStore(store).clear(); r.onsuccess=res; r.onerror=rej; }); }
 
 function dayKey(off=0){ const d=new Date(); d.setDate(d.getDate()+off); return d.toISOString().slice(0,10); }
 function sKey(ts){ return new Date(ts).toISOString().slice(0,10); }
@@ -766,10 +917,12 @@ async function migrate(){
 function showScreen(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
-  document.getElementById(name==='log'?'logscreen':name==='stats'?'statsscreen':'tracker').classList.add('active');
+  let sid=name==='log'?'logscreen':name==='stats'?'statsscreen':name==='settings'?'settingsscreen':'tracker';
+  document.getElementById(sid).classList.add('active');
   document.getElementById('nav-'+name).classList.add('on');
   if(name==='log') renderLog();
   if(name==='stats') renderStats();
+  if(name==='settings') renderSettings();
 }
 
 // ══ FIREWORKS ══
@@ -930,54 +1083,80 @@ function changeDay(d){ vOff=Math.min(0,vOff+d); renderLog(); }
 const CLABELS=['','Clear','Pale Yellow','Yellow','Dark Yellow','Dark Amber'];
 const CDOTS=['','⚪','🟡','🟡','🟠','🟤'];
 
-async function deleteSession(ts){
-  if(!confirm('Delete this session? This cannot be undone.')) return;
+async function deleteSession(ts,store=SN){
+  if(!confirm('Delete this entry? This cannot be undone.')) return;
   const el=document.querySelector(`.logitem[data-ts="${ts}"]`);
   if(el) el.classList.add('del');
-  setTimeout(async()=>{ await dbDel(ts); renderLog(); renderTracker(); },280);
+  setTimeout(async()=>{ await dbDel(ts,store); renderLog(); renderTracker(); },280);
 }
 
 async function clearDay(){
-  if(!confirm('Clear all sessions for this day?')) return;
-  const all=await dbAll();
-  for(const s of all.filter(x=>sKey(x.ts)===dayKey(vOff))) await dbDel(s.ts);
+  if(!confirm('Clear all entries for this day?')) return;
+  const sessions=await dbAll(SN);
+  for(const s of sessions.filter(x=>sKey(x.ts)===dayKey(vOff))) await dbDel(s.ts,SN);
+  const intakes=await dbAll(SI);
+  for(const i of intakes.filter(x=>sKey(x.ts)===dayKey(vOff))) await dbDel(i.ts,SI);
   renderLog(); renderTracker();
 }
 
 async function renderLog(){
-  const all=await dbAll();
-  const ss=all.filter(s=>sKey(s.ts)===dayKey(vOff)).sort((a,b)=>b.ts-a.ts);
-  const tot=ss.reduce((a,s)=>a+s.dur,0);
-  document.getElementById('lc').textContent=ss.length;
+  const sessions=await dbAll(SN);
+  const intakes=await dbAll(SI);
+
+  const daySessions=sessions.filter(s=>sKey(s.ts)===dayKey(vOff));
+  const dayIntakes=intakes.filter(i=>sKey(i.ts)===dayKey(vOff));
+
+  const combined=[
+    ...daySessions.map(s=>({...s,kind:'session'})),
+    ...dayIntakes.map(i=>({...i,kind:'intake'}))
+  ].sort((a,b)=>b.ts-a.ts);
+
+  const tot=daySessions.reduce((a,s)=>a+s.dur,0);
+  document.getElementById('lc').textContent=daySessions.length;
   document.getElementById('lt').textContent=fmtS(tot);
-  document.getElementById('la').textContent=ss.length?fmtS(tot/ss.length):'—';
+  document.getElementById('la').textContent=daySessions.length?fmtS(tot/daySessions.length):'—';
   document.getElementById('dnext').disabled=vOff>=0;
   const dl={0:'TODAY','-1':'YESTERDAY'};
   const d=new Date(); d.setDate(d.getDate()+vOff);
   document.getElementById('dnlbl').textContent=dl[vOff]||d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   document.getElementById('logdate').innerHTML=new Date().toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric'})+'<br>'+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   const list=document.getElementById('loglist');
-  if(!ss.length){ list.innerHTML='<div class="emptymsg">NO SESSIONS THIS DAY</div>'; return; }
-  list.innerHTML=ss.map((s,i)=>{
-    const t=new Date(s.ts);
+  if(!combined.length){ list.innerHTML='<div class="emptymsg">NO ACTIVITY THIS DAY</div>'; return; }
+  list.innerHTML=combined.map((item,i)=>{
+    const t=new Date(item.ts);
     const ts2=t.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
+    if(item.kind==='intake'){
+      return `<div class="logitem" style="border-left-color:var(--accent)" data-ts="${item.ts}">
+        <div><div class="lit">INTAKE · ${ts2}</div><div class="lid" style="color:var(--accent)">${item.amt}${item.unit}</div></div>
+        <div class="lir">${item.type}</div>
+        <button class="lidelbtn" onclick="deleteSession(${item.ts},SI)">🗑</button>
+      </div>`;
+    }
+
     let b='';
-    if(s.thumb==='up')   b+='<span class="badge g">👍 Good</span>';
-    if(s.thumb==='down') b+='<span class="badge r">👎 Poor</span>';
-    if(s.drip==='yes')   b+='<span class="badge r">💦 Drip</span>';
-    if(s.drip==='no')    b+='<span class="badge g">✅ Clean</span>';
-    if(s.urgency)        b+='<span class="badge o">⚡ Urgent</span>';
-    if(s.pain)           b+='<span class="badge r">🔥 Pain</span>';
-    if(s.weak)           b+='<span class="badge y">📉 Weak</span>';
-    if(s.color)          b+=`<span class="badge">${CDOTS[s.color]} ${CLABELS[s.color]}</span>`;
-    return `<div class="logitem" data-ts="${s.ts}">
-      <div><div class="lit">#${ss.length-i} · ${ts2}</div><div class="lid">${fmtT(s.dur)}</div></div>
-      <div class="lir">${s.dur.toFixed(1)}s</div>
-      <button class="lidelbtn" onclick="deleteSession(${s.ts})">🗑</button>
+    if(item.thumb==='up')   b+='<span class="badge g">👍 Good</span>';
+    if(item.thumb==='down') b+='<span class="badge r">👎 Poor</span>';
+    if(item.drip==='yes')   b+='<span class="badge r">💦 Drip</span>';
+    if(item.drip==='no')    b+='<span class="badge g">✅ Clean</span>';
+    if(item.urgency)        b+='<span class="badge o">⚡ Urgent</span>';
+    if(item.pain)           b+='<span class="badge r">🔥 Pain</span>';
+    if(item.weak)           b+='<span class="badge y">📉 Weak</span>';
+    if(item.color)          b+=`<span class="badge">${CDOTS[item.color]} ${CLABELS[item.color]}</span>`;
+    if(item.leak)           b+='<span class="badge r">💦 Leak/Accident</span>';
+    if(item.manual)         b+='<span class="badge">✍️ Manual</span>';
+
+    let lidContent = fmtT(item.dur);
+    if(item.vol) lidContent = `${item.vol}${item.volUnit}`;
+
+    return `<div class="logitem" data-ts="${item.ts}">
+      <div><div class="lit">STREAM · ${ts2}</div><div class="lid">${lidContent}</div></div>
+      <div class="lir">${item.dur.toFixed(1)}s</div>
+      <button class="lidelbtn" onclick="deleteSession(${item.ts},SN)">🗑</button>
       ${b?`<div class="badges">${b}</div>`:''}
-      ${s.notes?`<div class="linote">📝 ${s.notes}</div>`:''}
-      ${s.photo?`<div class="liphoto"><img src="${s.photo}" alt=""></div>`:''}
-      <button class="liaddphoto" onclick="openPeModal(${s.ts})">${s.photo?'🔄 Replace photo':'📷 Add photo'}</button>
+      ${item.notes?`<div class="linote">📝 ${item.notes}</div>`:''}
+      ${item.photo?`<div class="liphoto"><img src="${item.photo}" alt=""></div>`:''}
+      <button class="liaddphoto" onclick="openPeModal(${item.ts})">${item.photo?'🔄 Replace photo':'📷 Add photo'}</button>
     </div>`;
   }).join('');
 }
@@ -1076,17 +1255,19 @@ function buildInsights(all){
 }
 
 async function renderStats(){
-  const all=await dbAll();
+  const sessions=await dbAll(SN);
+  const intakes=await dbAll(SI);
+
   let tot=0,cnt=0,dFree=0,dRated=0,longest=0,days=new Set();
   const cc=[0,0,0,0,0],hh=Array(24).fill(0),dc={};
-  all.forEach(s=>{ tot+=s.dur;cnt++;if(s.dur>longest)longest=s.dur;if(s.drip==='no')dFree++;if(s.drip)dRated++;if(s.color)cc[s.color-1]++;hh[new Date(s.ts).getHours()]++;const k=sKey(s.ts);days.add(k);dc[k]=(dc[k]||0)+1; });
+  sessions.forEach(s=>{ tot+=s.dur;cnt++;if(s.dur>longest)longest=s.dur;if(s.drip==='no')dFree++;if(s.drip)dRated++;if(s.color)cc[s.color-1]++;hh[new Date(s.ts).getHours()]++;const k=sKey(s.ts);days.add(k);dc[k]=(dc[k]||0)+1; });
   document.getElementById('at').textContent=cnt;
   document.getElementById('ati').textContent=fmtS(tot);
   document.getElementById('aav').textContent=cnt?fmtS(tot/cnt):'—';
   document.getElementById('adr').textContent=dRated?Math.round(dFree/dRated*100)+'%':'—';
   document.getElementById('aln').textContent=longest?fmtT(longest):'—';
   document.getElementById('ady').textContent=days.size;
-  document.getElementById('insights').innerHTML=buildInsights([...all]).map(c=>`<div class="icard"><div class="idot ${c.dot}"></div><div class="itxt"><div class="ititle">${c.title}</div><div class="ibody">${c.body}</div></div></div>`).join('');
+  document.getElementById('insights').innerHTML=buildInsights([...sessions]).map(c=>`<div class="icard"><div class="idot ${c.dot}"></div><div class="itxt"><div class="ititle">${c.title}</div><div class="ibody">${c.body}</div></div></div>`).join('');
   const maxH=Math.max(...hh,1);
   document.getElementById('heatmap').innerHTML=hh.map((n,h)=>{ const a=n===0?.05:.08+n/maxH*.85; const bg=n===0?'var(--card2)':`rgba(0,212,255,${a.toFixed(2)})`; return `<div class="hmcell" style="background:${bg}" title="${h}:00 — ${n}"></div>`; }).join('');
   const d7=Array.from({length:7},(_,i)=>dayKey(i-6));
@@ -1095,6 +1276,58 @@ async function renderStats(){
   document.getElementById('trendlbls').innerHTML=d7.map((k,i)=>{ const dd=new Date(k+'T12:00:00'); return `<div class="trendlbl">${i===6?'Today':dd.toLocaleDateString('en-US',{weekday:'short'})}</div>`; }).join('');
   const maxC=Math.max(...cc,1),sw=['#fefde8','#ffe566','#ffc107','#e68900','#a0560a'];
   document.getElementById('histwrap').innerHTML=cc.map((n,i)=>`<div class="histbar" style="height:${Math.max(4,n/maxC*100)}%;background:${sw[i]}"></div>`).join('');
+
+  renderHydrationGoal(intakes);
+  renderClinicalSummary(sessions,intakes);
+}
+
+function renderHydrationGoal(intakes){
+  const today=dayKey(0);
+  const total=intakes.filter(i=>sKey(i.ts)===today).reduce((a,v)=>a+v.amt,0);
+
+  let goal=2500; // Default
+  if(PROF.weight){
+    // ~35ml per kg is a standard clinical guideline
+    goal=PROF.unit==='metric'?Math.round(PROF.weight*35):Math.round(PROF.weight*0.5); // 0.5 oz per lb
+  }
+
+  const unit=PROF.unit==='metric'?'ml':'oz';
+  const pct=Math.min(100,Math.round(total/goal*100));
+  document.getElementById('h-progress').textContent=`${pct}%`;
+  document.getElementById('h-total').textContent=`${total} / ${goal} ${unit}`;
+  document.getElementById('h-bar').style.width=`${pct}%`;
+  document.getElementById('h-goal-lbl').textContent=`Goal based on weight (${PROF.weight||'?'} ${PROF.unit==='metric'?'kg':'lb'})`;
+}
+
+function isNight(ts){
+  const t=new Date(ts);
+  const time=`${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`;
+  const bed=PROF.bed, wake=PROF.wake;
+  if(bed<=wake) return time>=bed && time<=wake;
+  return time>=bed || time<=wake;
+}
+
+function renderClinicalSummary(sessions,intakes){
+  const last3=Array.from({length:3},(_,i)=>dayKey(-i));
+  const html=last3.map(day=>{
+    const dInt=intakes.filter(i=>sKey(i.ts)===day).reduce((a,v)=>a+v.amt,0);
+    const dSess=sessions.filter(s=>sKey(s.ts)===day);
+    const dOut=dSess.reduce((a,v)=>a+v.dur,0);
+    const dMax=dSess.length?Math.max(...dSess.map(s=>s.dur)):0;
+    const dNight=dSess.filter(s=>isNight(s.ts)).length;
+
+    const dObj=new Date(day+'T12:00:00');
+    const dLabel=day===dayKey(0)?'Today':dObj.toLocaleDateString('en-US',{weekday:'short'});
+
+    return `<tr style="border-top:1px solid var(--border)">
+      <td style="padding:8px;">${dLabel}</td>
+      <td style="padding:8px;">${dInt}${PROF.unit==='metric'?'ml':'oz'}</td>
+      <td style="padding:8px;">${dOut.toFixed(0)}s</td>
+      <td style="padding:8px;">${dMax.toFixed(0)}s</td>
+      <td style="padding:8px;">${dNight}x</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('clin-body').innerHTML=html;
 }
 
 // ══ PDF ══
@@ -1112,32 +1345,58 @@ async function exportPDF(){
   const ok=await loadJsPDF();
   if(!ok||!window.jspdf){ alert('PDF library failed to load. Check your internet connection.'); return; }
   const {jsPDF}=window.jspdf;
-  const all=await dbAll();
+  const sessions=await dbAll(SN);
+  const intakes=await dbAll(SI);
   const now=Date.now();
-  let filtered=pdfR===0?all:all.filter(s=>s.ts>=now-pdfR*864e5);
+  let filtered=pdfR===0?sessions:sessions.filter(s=>s.ts>=now-pdfR*864e5);
   const label=pdfR===7?'Last 7 Days':pdfR===30?'Last 30 Days':'All Time';
   filtered=filtered.sort((a,b)=>a.ts-b.ts);
   if(!filtered.length){ alert('No sessions in selected range.'); return; }
   const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
   const W=210,M=18;let y=M;
   doc.setFillColor(4,8,16);doc.rect(0,0,W,28,'F');
-  doc.setFont('helvetica','bold');doc.setFontSize(16);doc.setTextColor(0,212,255);doc.text('STREAM TRACKER',M,13);
-  doc.setFontSize(8);doc.setTextColor(138,180,204);doc.text(`Urine Health Report · ${label} · ${new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}`,M,21);
+  doc.setFont('helvetica','bold');doc.setFontSize(16);doc.setTextColor(0,212,255);doc.text('URINE TRACKER',M,13);
+  doc.setFontSize(8);doc.setTextColor(138,180,204);doc.text(`Clinical Report · ${label} · ${new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}`,M,21);
+
+  // Profile info at top right
+  doc.setFontSize(7); doc.setTextColor(240,248,255);
+  const profInfo = `Weight: ${PROF.weight||'?'}${PROF.unit==='metric'?'kg':'lb'}`;
+  doc.text(profInfo, W-M-doc.getTextWidth(profInfo), 13);
+
   y=34;
   const tot=filtered.reduce((a,s)=>a+s.dur,0);
   const avg=filtered.length?tot/filtered.length:0;
   const dr=filtered.filter(s=>s.drip),drfree=filtered.filter(s=>s.drip==='no');
   doc.setFillColor(13,24,40);doc.roundedRect(M,y,W-M*2,34,3,3,'F');
-  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(0,212,255);doc.text('SUMMARY',M+6,y+7);
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(0,212,255);doc.text('STATISTICAL SUMMARY',M+6,y+7);
   doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(240,248,255);
   const sdata=[['Total Sessions',filtered.length],['Total Stream Time',fmtS(tot)],['Avg Duration',fmtS(avg)],['Drip-Free Rate',dr.length?Math.round(drfree.length/dr.length*100)+'%':'N/A'],['Date Range',`${fmtDate(filtered[0].ts)} – ${fmtDate(filtered[filtered.length-1].ts)}`],['Sessions w/ Symptoms',filtered.filter(s=>s.urgency||s.pain||s.weak).length]];
   sdata.forEach((row,i)=>{ const col=i<3?M+6:M+(W-M*2)/2+4,r=i<3?i:i-3; doc.setTextColor(138,180,204);doc.text(row[0],col,y+14+r*7);doc.setTextColor(240,248,255);doc.text(String(row[1]),col+44,y+14+r*7); });
-  y+=40;
+  y+=42;
+
+  // Clinical Summary Table (Daily)
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(0,212,255);doc.text('VOIDING DIARY (DAILY SUMMARY)',M,y);y+=6;
+  const ccols=[40,30,30,30,44];const chdrs=['Date','Intake','Output (s)','Max (s)','Night Sessions'];
+  doc.setFillColor(13,24,40);doc.rect(M,y-4,W-M*2,6,'F');
+  doc.setFontSize(7.5); let cx=M+2; chdrs.forEach((h,i)=>{doc.text(h,cx,y);cx+=ccols[i];});y+=6;
+  doc.setFont('helvetica','normal');doc.setTextColor(220,235,248);
+  const uniqueDays = [...new Set(filtered.map(s=>sKey(s.ts)))].sort().reverse();
+  uniqueDays.forEach(day=>{
+    const dInt=intakes.filter(i=>sKey(i.ts)===day).reduce((a,v)=>a+v.amt,0);
+    const dSess=filtered.filter(s=>sKey(s.ts)===day);
+    const dOut=dSess.reduce((a,v)=>a+v.dur,0);
+    const dMax=dSess.length?Math.max(...dSess.map(s=>s.dur)):0;
+    const dNight=dSess.filter(s=>isNight(s.ts)).length;
+    const row=[new Date(day+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),`${dInt}${PROF.unit==='metric'?'ml':'oz'}`,`${dOut.toFixed(1)}s`,`${dMax.toFixed(1)}s`,`${dNight}x` ];
+    cx=M+2; row.forEach((v,j)=>{doc.text(String(v),cx,y);cx+=ccols[j];}); y+=5;
+  });
+
+  y+=6;
   doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(0,212,255);doc.text('SESSION LOG',M,y);y+=8;
   const cols=[20,52,20,22,20,20,20];const hdrs=['Date/Time','Duration','Color','Drip','Urgent','Pain','Weak'];
   doc.setFillColor(13,24,40);doc.rect(M,y-5,W-M*2,7,'F');
   doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(0,212,255);
-  let cx=M+2;hdrs.forEach((h,i)=>{doc.text(h,cx,y);cx+=cols[i];});y+=4;
+  cx=M+2;hdrs.forEach((h,i)=>{doc.text(h,cx,y);cx+=cols[i];});y+=4;
   doc.setFont('helvetica','normal');doc.setTextColor(220,235,248);
   const cn=['','Clear','Pale Yel','Yellow','Dark Yel','Amber'];
   [...filtered].reverse().forEach((s,i)=>{
@@ -1150,7 +1409,7 @@ async function exportPDF(){
     y+=6;
   });
   const pages=doc.getNumberOfPages();
-  for(let p=1;p<=pages;p++){doc.setPage(p);doc.setFontSize(7);doc.setTextColor(80,100,120);doc.text(`Stream Tracker · Page ${p} of ${pages} · Personal reference only. Consult a healthcare professional for medical advice.`,M,290);}
+  for(let p=1;p<=pages;p++){doc.setPage(p);doc.setFontSize(7);doc.setTextColor(80,100,120);doc.text(`Urine Tracker · Page ${p} of ${pages} · Personal reference only. Consult a healthcare professional for medical advice.`,M,290);}
   doc.save(`stream_tracker_${new Date().toISOString().slice(0,10)}.pdf`);
 }
 
@@ -1165,7 +1424,103 @@ async function handleImport(e){
   };
   reader.readAsText(file);e.target.value='';
 }
-async function clearAll(){ if(!confirm('Delete ALL data? This cannot be undone.')) return; await dbClear(); renderTracker(); alert('All data cleared.'); }
+async function clearAll(){ if(!confirm('Delete ALL data? This cannot be undone.')) return; await dbClear(SN); await dbClear(SI); await dbClear(SP); renderTracker(); alert('All data cleared.'); }
+
+// ══ SETTINGS / PROFILE ══
+let PROF={id:1,weight:'',unit:'metric',bed:'23:00',wake:'07:00'};
+async function loadProfile(){
+  const p=await dbGet(1,SP);
+  if(p) PROF=p;
+  renderSettings();
+}
+function renderSettings(){
+  document.getElementById('p-weight').value=PROF.weight;
+  document.getElementById('p-bed').value=PROF.bed;
+  document.getElementById('p-wake').value=PROF.wake;
+  setUnit(PROF.unit,false);
+}
+function setUnit(u,save=true){
+  PROF.unit=u;
+  document.getElementById('p-unit-metric').classList.toggle('on',u==='metric');
+  document.getElementById('p-unit-imp').classList.toggle('on',u==='imp');
+  document.getElementById('w-unit-lbl').textContent=u==='metric'?'kg':'lb';
+}
+async function saveProfile(){
+  PROF.weight=document.getElementById('p-weight').value;
+  PROF.bed=document.getElementById('p-bed').value;
+  PROF.wake=document.getElementById('p-wake').value;
+  await dbPut(PROF,SP);
+  document.querySelectorAll('.vol-unit').forEach(el=>el.textContent=PROF.unit==='metric'?'ml':'oz');
+  alert('Profile saved!');
+}
+
+// ══ INTAKE ══
+let I_AMT=0, I_TYPE='Water';
+function openIntakeModal(){
+  document.getElementById('i-amt').value='';
+  pickIntakeType('Water');
+  document.querySelectorAll('.vol-unit').forEach(el=>el.textContent=PROF.unit==='metric'?'ml':'oz');
+  document.getElementById('imodall').classList.add('on');
+}
+function closeIntakeModal(){ document.getElementById('imodall').classList.remove('on'); }
+function pickIntakeType(t){
+  I_TYPE=t;
+  ['Water','Coffee/Tea','Soda/Juice','Alcohol'].forEach(k=>{
+    const id='it-'+k.split('/')[0].toLowerCase();
+    document.getElementById(id).classList.toggle('ca',I_TYPE===k);
+  });
+}
+async function quickIntake(amt){
+  let finalAmt=amt;
+  if(PROF.unit==='imp') finalAmt=Math.round(amt/29.5735); // Approx ml to oz
+  await dbPut({ts:Date.now(),amt:finalAmt,type:'Water',unit:PROF.unit==='metric'?'ml':'oz'},SI);
+  alert(`Logged ${finalAmt}${PROF.unit==='metric'?'ml':'oz'} Water`);
+  renderLog(); renderStats();
+}
+async function saveIntake(){
+  const amt=parseFloat(document.getElementById('i-amt').value);
+  if(!amt){ alert('Enter amount'); return; }
+  await dbPut({ts:Date.now(),amt,type:I_TYPE,unit:PROF.unit==='metric'?'ml':'oz'},SI);
+  closeIntakeModal();
+  renderLog(); renderStats();
+}
+
+// ══ MANUAL PISS ══
+let M_LEAK=false;
+function openManualModal(){
+  document.getElementById('m-vol').value='';
+  document.getElementById('m-dur').value='';
+  M_LEAK=false;
+  document.getElementById('m-leak').classList.remove('ca');
+  const now=new Date();
+  document.getElementById('m-time').value=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  document.getElementById('mmodal').classList.add('on');
+}
+function closeManualModal(){ document.getElementById('mmodal').classList.remove('on'); }
+function toggleMLeak(){ M_LEAK=!M_LEAK; document.getElementById('m-leak').classList.toggle('ca',M_LEAK); }
+
+async function saveManual(){
+  const vol=parseFloat(document.getElementById('m-vol').value);
+  const dur=parseFloat(document.getElementById('m-dur').value);
+  if(!vol && !dur){ alert('Enter volume or duration'); return; }
+
+  const tStr=document.getElementById('m-time').value;
+  const d=new Date(); d.setDate(d.getDate()+vOff);
+  const [h,m]=tStr.split(':'); d.setHours(h,m,0,0);
+
+  const s={
+    ts:d.getTime(),
+    dur:dur||0,
+    vol:vol||null,
+    volUnit:vol?PROF.unit==='metric'?'ml':'oz':null,
+    leak:M_LEAK,
+    manual:true,
+    thumb:null,drip:null,color:null,urgency:false,pain:false,weak:false
+  };
+  await dbPut(s,SN);
+  closeManualModal();
+  renderLog(); renderStats(); renderTracker();
+}
 
 // ══ INIT ══
 openDB().then(async()=>{
@@ -1176,6 +1531,7 @@ openDB().then(async()=>{
     document.getElementById('ob').classList.remove('active');
     showScreen('tracker');
   }
+  await loadProfile();
   renderTracker();
   setInterval(renderTracker,60000);
 });
